@@ -13,16 +13,34 @@ dark blue: #07485E */
     text-align: center;
 }
 
+#game {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* canvas */
+
+canvas {
+    display: block;
+    width: 500px;
+    height: 700px;
+}
+
+/* buttons */
 button {
     display: block;
     text-transform: uppercase;
     font-size: 2em;
     border-radius: 10px;
     padding: 20px 30px;
-    margin: 50px auto;
 }
 
 button#start-game {
+    margin: 50px 0;
     background-color: #00CC76;
     color: #E1EBF0;
     border: #0B799D solid 3px;
@@ -34,6 +52,7 @@ button#reload-game {
     border: #00CC76 solid 3px;
 }
 
+/* game-over */
 #game-over {
     position: absolute;
     top: 0;
