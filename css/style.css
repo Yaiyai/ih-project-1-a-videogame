@@ -6,20 +6,67 @@ xlight blue: #E1EBF0
 light blue: #B4D2D7
 blue: #0B799D
 dark blue: #07485E */
-
-
-
-
 * {
     padding: 0;
     margin: 0;
+    font-family: 'Share Tech Mono', monospace;
+    text-align: center;
 }
 
-body {
-    font-family: 'Share Tech Mono',
-        monospace;
-}
-
-#start-button {
+button {
+    display: block;
     text-transform: uppercase;
+    font-size: 2em;
+    border-radius: 10px;
+    padding: 20px 30px;
+    margin: 50px auto;
+}
+
+button#start-game {
+    background-color: #00CC76;
+    color: #E1EBF0;
+    border: #0B799D solid 3px;
+}
+
+button#reload-game {
+    background-color: #0B799D;
+    color: #E1EBF0;
+    border: #00CC76 solid 3px;
+}
+
+#game-over {
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(7, 72, 94, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-over #pop-up {
+    background-color: white;
+    padding: 80px 50px;
+    border-radius: 20px;
+    border: #00CC76 solid 4px;
+}
+
+#game-over #pop-up h3 {
+    color: #00CC76;
+    font-size: 2.5em;
+    text-transform: capitalize;
+    margin: 0 0 30px;
+}
+
+#game-over #pop-up p {
+    color: #0B799D;
+    font-size: 1.3em;
+    text-transform: capitalize;
+}
+
+#game-over #pop-up p:last-child {
+    color: #00CC76;
+    font-size: 1.3em;
+    text-transform: capitalize;
 }
