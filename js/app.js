@@ -29,21 +29,29 @@ const doctorYai = {
         this.canvasDom.setAttribute('height', this.size.h)
     },
     start() {
-        this.drawAll()
+        this.reset()
         this.setEventListeners()
 
         this.interval = setInterval(() => {
             this.clearScreen()
+            if (this.framesCounter > 5000) {
+                this.framesCounter = 0
+            }
 
             this.framesCounter++
-            this.framesCounter % 1000 ? this.drawPieces() : null
+
+            this.framesCounter % 2000 ? this.drawPieces() : null
             this.drawBackground()
+
             this.piece.forEach(pcs => {
                 pcs.draw()
+                if (pcs.posY > 700) {
+                    this.piece.shift()
+                }
             })
 
-
-        }, 2000)
+            console.log(this.piece)
+        }, 1000)
 
 
     },
@@ -59,8 +67,9 @@ const doctorYai = {
             })
         }
     },
-    drawAll() {
+    reset() {
         this.drawBackground()
+        this.drawPieces()
     },
     drawBackground() {
         this.ctx.fillStyle = '#E1EBF0'
@@ -69,6 +78,7 @@ const doctorYai = {
         this.ctx.lineWidth = 10
         this.ctx.strokeRect(0, 0, this.size.w, this.size.h)
     },
+
     drawPieces() {
         this.piece.push(new Pieces(this.ctx))
     },
