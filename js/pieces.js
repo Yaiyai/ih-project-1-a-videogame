@@ -31,11 +31,8 @@ class Pieces {
             this.posX = 0
         }
         if (this.posX >= 650) {
-            this.posY = 650
+            this.posX = 650
         }
-    }
-    autoCollision() {
-        return 
     }
 
 }

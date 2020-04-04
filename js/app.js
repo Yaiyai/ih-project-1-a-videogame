@@ -40,14 +40,12 @@ const doctorYai = {
 
             this.framesCounter++
 
-            this.framesCounter % 2000 ? this.drawPieces() : null
+            this.getPieces()
             this.drawBackground()
 
             this.piece.forEach(pcs => {
                 pcs.draw()
-                if (pcs.posY > 700) {
-                    this.piece.shift()
-                }
+                this.isCollision() ? console.log('hola') : null
             })
 
             console.log(this.piece)
@@ -69,7 +67,7 @@ const doctorYai = {
     },
     reset() {
         this.drawBackground()
-        this.drawPieces()
+        this.getPieces()
     },
     drawBackground() {
         this.ctx.fillStyle = '#E1EBF0'
@@ -79,13 +77,18 @@ const doctorYai = {
         this.ctx.strokeRect(0, 0, this.size.w, this.size.h)
     },
 
-    drawPieces() {
+    getPieces() {
         this.piece.push(new Pieces(this.ctx))
     },
 
-    isStoped() {
-
-    }
-
+    isCollision() {
+        return this.piece.some(obs => {
+            return (
+                this.piece.posX + this.piece.width >= obs.posX &&
+                this.piece.posY + this.piece.height >= obs.posY &&
+                this.piece.posX <= obs.posX + obs.width
+            );
+        });
+    },
 
 }
