@@ -1,5 +1,5 @@
 /* colors:
-almost white: #FFF5F5
+almost white: #F5F6F9
 light green: #A5E887
 dark green: #00CC76
 xlight blue: #E1EBF0
@@ -24,11 +24,6 @@ dark blue: #07485E */
 
 /* canvas */
 
-canvas {
-    display: block;
-    width: 500px;
-    height: 700px;
-}
 
 /* buttons */
 button {
