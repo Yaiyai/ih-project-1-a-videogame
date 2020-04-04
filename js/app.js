@@ -1,5 +1,4 @@
 const doctorYai = {
-    canvas: undefined,
     ctx: undefined,
     size: {
         w: undefined,
@@ -7,13 +6,15 @@ const doctorYai = {
     },
     canvasDom: undefined,
     fps: 24,
+    framesCounter: 0,
+    interval: undefined,
     key: {
         SPACE: 32,
         LEFT: 37,
         RIGHT: 39,
         DOWN: 40,
     },
-    pieces: [],
+    piece: [],
 
     init() {
         this.canvasDom = document.getElementById('my-tetris')
@@ -29,13 +30,34 @@ const doctorYai = {
     },
     start() {
         this.drawAll()
-        setInterval(() => {
+        this.setEventListeners()
+
+        this.interval = setInterval(() => {
             this.clearScreen()
+
+            this.framesCounter++
+            this.framesCounter % 1000 ? this.drawPieces() : null
             this.drawBackground()
-        }, 1000 / this.fps)
+            this.piece.forEach(pcs => {
+                pcs.draw()
+            })
+
+
+        }, 2000)
+
+
     },
     clearScreen() {
         this.ctx.clearRect(0, 0, this.size.w, this.size.h)
+    },
+    setEventListeners() {
+        document.onkeyup = e => {
+            this.piece.forEach(pcs => {
+                e.keyCode === 37 ? pcs.move('left') : null
+                e.keyCode === 39 ? pcs.move('right') : null
+                e.keyCode === 40 ? pcs.move('down') : null
+            })
+        }
     },
     drawAll() {
         this.drawBackground()
@@ -47,6 +69,13 @@ const doctorYai = {
         this.ctx.lineWidth = 10
         this.ctx.strokeRect(0, 0, this.size.w, this.size.h)
     },
+    drawPieces() {
+        this.piece.push(new Pieces(this.ctx))
+    },
+
+    isStoped() {
+
+    }
 
 
 }

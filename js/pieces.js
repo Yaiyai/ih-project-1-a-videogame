@@ -1,22 +1,38 @@
 class Pieces {
-    constructor(ctx, posX, posY, width, height, color) {
+    constructor(ctx) {
         this.ctx = ctx
-        this.posX = posX
-        this.posY = posY
-        this.width = width
-        this.height = height
-        this.color = color
+        this.posX = Math.floor(Math.random() * 500)
+        this.posY = 0
+        this.width = 50
+        this.height = 50
+        this.color = this.setColor()
         this.speed = 100
     }
+    setColor() {
+        let colours = ['#00CC76', '#B4D2D7', '#0B799D']
+        return colours[Math.floor(Math.random() * colours.length)]
+    }
     draw() {
-        this.ctx.fillRect(this.ctx, this.posX, this.posY, this.width, this.height, this.color)
+        this.ctx.fillStyle = this.color
+        this.ctx.fillRect(this.posX, this.posY, this.width, this.height)
         this.move()
     }
+
+
     move(dir) {
-        dir === 'left' ? this.posX -= this.vel : null
-        dir === 'right' ? this.posX += this.vel : null
-        dir === 'down' ? this.posY += this.vel : null
-
-
+        this.posY += this.speed
+        dir === 'left' ? this.posX -= this.speed : null
+        dir === 'right' ? this.posX += this.speed : null
+        dir === 'down' ? this.posY += this.speed : null
     }
+
 }
+
+/* colors:
+almost white: #F5F6F9
+light green: #A5E887
+dark green: #00CC76
+xlight blue: #E1EBF0
+light blue: #B4D2D7
+blue: #0B799D
+dark blue: #07485E */
