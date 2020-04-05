@@ -6,16 +6,10 @@ class Pieces {
         this.columns = 10 //valores que pueden variar. Columnas y filas.
         this.rows = 14
         this.color = this.setColor()
-        // this.minPiece = [
-        //     [0, 0, 0],
-        //     [0, 1, 0],
-        //     [0, 0, 0]
-        // ]
-        this.minPiece = [
+        this.initPiece = [
             [1]
         ]
-        this.activePiece = this.minPiece
-        this.posX = 0
+        this.posX = 4
         this.posY = 0
     }
     setColor() {
@@ -31,10 +25,10 @@ class Pieces {
     }
 
     draw() {
-        for (let i = 0; i < this.activePiece.length; i++) {
-            for (let k = 0; k < this.activePiece.length; k++) {
+        for (let i = 0; i < this.initPiece.length; i++) {
+            for (let k = 0; k < this.initPiece.length; k++) {
                 //Si el elemento no está vacío, dibuja una unidad.
-                if (this.activePiece[i][k]) {
+                if (this.initPiece[i][k]) {
                     //La posición inicial + el número de la columna o fila
                     this.drawUnit(this.posX + i, this.posY + k, this.color)
                 }
@@ -43,15 +37,47 @@ class Pieces {
         this.move()
     }
 
-    move(dir) {
-        //Llamada a las keys
-        dir === 'left' ? this.posX-- : null
-        dir === 'right' ? this.posX++ : null
-        dir === 'down' ? this.posY++ : null
-
+    down() {
         this.posY++
+        // if (!this.colision) {
+        //     this.posY++
+        // } else {
+        //     //la pieza se para
+        //     //el juego suelta otra pieza
+        // }
 
-        //Límites del tablero
+    }
+    right() {
+
+        // if (!this.colision) {
+        //     this.posX++
+        // } else {
+        //     //la pieza se para
+        //     //el juego suelta otra pieza
+        // }
+
+    }
+
+    left() {
+
+        // if (!this.colision) {
+        //     this.posX--
+        // } else {
+        //     //la pieza se para
+        //     //el juego suelta otra pieza
+        // }
+    }
+
+    move(dir) {
+        dir === 'down' ? this.posY++ : null
+        dir === 'right' ? this.posX++ : null
+        dir === 'left' ? this.posX-- : null
+
+        this.down()
+        this.left()
+        this.right()
+
+        //Límites del tablero, parte de las colisiones
         if (this.posY >= this.rows - 1) {
             this.posY = this.rows - 1
         }
@@ -61,11 +87,21 @@ class Pieces {
         if (this.posX <= 0) {
             this.posX = 0
         }
-
-
     }
 
+    colision() {
+        //Hay colision cuando pilla un borde lateral o el de abajo
+        //Hay colision cuando se encuentra con una pieza quieta, entonces se queda ahi
+    }
+
+
 }
+
+
+
+
+
+
 
 /* colors:
 almost white: #F5F6F9

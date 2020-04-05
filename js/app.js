@@ -23,6 +23,16 @@ const doctorYai = {
         this.setDimensions()
         this.start()
     },
+    start() {
+        this.getBkg()
+        this.getPiece()
+        this.setEventlisteners()
+
+        this.interval = setInterval(() => {
+            this.clearScreen()
+            this.drawAll()
+        }, 1000)
+    },
     setDimensions() {
         this.size.w = 500
         this.size.h = 700
@@ -30,11 +40,10 @@ const doctorYai = {
         this.canvasDom.setAttribute('height', this.size.h)
     },
     setEventlisteners() {
-        document.onkeydown = (e => {
-            e.keycode === this.key.RIGHT ? this.piece.move('right') : null
-            e.keycode === this.key.LEFT ? this.piece.move('left') : null
-            e.keycode === this.key.DOWN ? this.piece.move('down') : null
-            console.log(this.setEventlisteners())
+        document.onkeyup = (e => {
+            e.keyCode === this.key.RIGHT ? this.piece.move('right') : null
+            e.keyCode === this.key.LEFT ? this.piece.move('left') : null
+            e.keyCode === this.key.DOWN ? this.piece.move('down') : null
         })
     },
     clearScreen() {
@@ -49,16 +58,6 @@ const doctorYai = {
     drawAll() {
         this.boardDrawed.draw()
         this.piece.draw()
-    },
-    start() {
-        this.getBkg()
-        this.getPiece()
-        this.setEventlisteners()
-
-        this.interval = setInterval(() => {
-            this.clearScreen()
-            this.drawAll()
-        }, 1000)
     },
 
 }
