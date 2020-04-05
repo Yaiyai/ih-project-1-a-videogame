@@ -1,38 +1,68 @@
 class Pieces {
     constructor(ctx) {
         this.ctx = ctx
-        this.posX = Math.floor(Math.random() * 10) * 50
-        this.posY = 0
-        this.width = 50
-        this.height = 50
+        this.unit = 50 // unidad a partir de la cual se renderiza la cuadrícula. Un cuadrado de lado 50.
+        this.empty = "white" // color de la unidad vacía
+        this.columns = 10 //valores que pueden variar. Columnas y filas.
+        this.rows = 14
         this.color = this.setColor()
-        this.speed = 50
+        // this.minPiece = [
+        //     [0, 0, 0],
+        //     [0, 1, 0],
+        //     [0, 0, 0]
+        // ]
+        this.minPiece = [
+            [1]
+        ]
+        this.activePiece = this.minPiece
+        this.posX = 0
+        this.posY = 0
     }
     setColor() {
-        let colours = ['#00CC76', '#B4D2D7', '#0B799D']
+        let colours = ['#00CC76', '#B4D2D7', '#B4D2D7']
         return colours[Math.floor(Math.random() * colours.length)]
     }
-    draw() {
+    drawUnit(x, y) {
         this.ctx.fillStyle = this.color
-        this.ctx.fillRect(this.posX, this.posY, this.width, this.height)
+        this.ctx.fillRect(x * this.unit, y * this.unit, this.unit, this.unit)
+
+        this.ctx.strokeStyle = '#07485E? '
+        this.ctx.strokeRect(x * this.unit, y * this.unit, this.unit, this.unit)
+    }
+
+    draw() {
+        for (let i = 0; i < this.activePiece.length; i++) {
+            for (let k = 0; k < this.activePiece.length; k++) {
+                //Si el elemento no está vacío, dibuja una unidad.
+                if (this.activePiece[i][k]) {
+                    //La posición inicial + el número de la columna o fila
+                    this.drawUnit(this.posX + i, this.posY + k, this.color)
+                }
+            }
+        }
         this.move()
     }
-    move(dir) {
-        this.posY += this.speed
-        dir === 'left' ? this.posX -= this.speed : null
-        dir === 'right' ? this.posX += this.speed : null
-        dir === 'down' ? this.posY += this.speed : null
 
-        //Border limits
-        if (this.posY >= 650) {
-            this.posY = 650
+    move(dir) {
+        //Llamada a las keys
+        dir === 'left' ? this.posX-- : null
+        dir === 'right' ? this.posX++ : null
+        dir === 'down' ? this.posY++ : null
+
+        this.posY++
+
+        //Límites del tablero
+        if (this.posY >= this.rows - 1) {
+            this.posY = this.rows - 1
+        }
+        if (this.posX >= this.columns - 1) {
+            this.posX = this.columns - 1
         }
         if (this.posX <= 0) {
             this.posX = 0
         }
-        if (this.posX >= 650) {
-            this.posX = 650
-        }
+
+
     }
 
 }
