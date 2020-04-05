@@ -13,39 +13,63 @@ dark blue: #07485E */
     text-align: center;
 }
 
+
+img {
+    display: block;
+    width: 100%;
+}
+
+
 #game {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
     height: 100vh;
     width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../img/bkg.jpg);
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
-/* canvas */
-
-
-/* buttons */
-button {
-    display: block;
-    text-transform: uppercase;
-    font-size: 2em;
-    border-radius: 10px;
-    padding: 20px 30px;
+#init-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-button#start-game {
-    margin: 50px 0;
-    background-color: #00CC76;
-    color: #E1EBF0;
-    border: #0B799D solid 3px;
+#init-game #logo {
+    width: 300px;
+    margin: 40px 0;
 }
 
-button#reload-game {
-    background-color: #0B799D;
-    color: #E1EBF0;
-    border: #00CC76 solid 3px;
+#init-game #instructions {
+    color: #0B799D;
+    font-size: 1.3em;
+    width: 650px;
+    padding: 5px;
 }
+
+#my-canvas {
+    display: none;
+}
+
+#my-canvas #on-game {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+#my-canvas #on-game #logo {
+    width: 100px;
+}
+
+#my-canvas #on-game p {
+    text-align: right;
+    color: #0B799D;
+}
+
 
 /* game-over */
 #game-over {
@@ -79,8 +103,25 @@ button#reload-game {
     text-transform: capitalize;
 }
 
-#game-over #pop-up p:last-child {
-    color: #00CC76;
-    font-size: 1.3em;
-    text-transform: capitalize;
+
+/* buttons */
+button {
+    display: block;
+    text-transform: uppercase;
+    font-size: 2em;
+    border-radius: 10px;
+    padding: 20px 30px;
+}
+
+button#start-game {
+    margin: 50px 0;
+    background-color: #00CC76;
+    color: #fff;
+    border: #0B799D solid 3px;
+}
+
+button#reload-game {
+    background-color: #0B799D;
+    color: #fff;
+    margin-top: 40px;
 }

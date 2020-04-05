@@ -1,3 +1,8 @@
+let scorePoints = document.getElementById('score-live')
+let gameOver = document.getElementById('game-over')
+let gameOverScore = document.getElementById('score-game-over')
+let reloadGame = document.getElementById('reload-game')
+
 const doctorYai = {
     ctx: undefined,
     canvasDom: undefined,
@@ -16,6 +21,7 @@ const doctorYai = {
     },
     piece: undefined,
     boardDrawed: [],
+    score: 0,
 
     init() {
         this.canvasDom = document.getElementById('my-tetris')
@@ -59,5 +65,14 @@ const doctorYai = {
         this.boardDrawed.draw()
         this.piece.draw()
     },
-
+    setScore() {
+        this.score += 100
+        scorePoints.innerHTML = this.score
+    },
+    gameOver(score) {
+        gameOver.style.display = 'flex'
+        gameOverScore.innerHTML = score
+        reloadGame.onclick(document.location.reload())
+        window.clearInterval(this.interval)
+    }
 }
