@@ -20,6 +20,7 @@ const doctorYai = {
         DOWN: 40,
     },
     piece: undefined,
+    blockedPieces: [],
     boardDrawed: [],
     score: 0,
 
@@ -37,6 +38,13 @@ const doctorYai = {
         this.interval = setInterval(() => {
             this.clearScreen()
             this.drawAll()
+            this.checkPiece(this.piece)
+            if (this.piece.isBlocked) {
+
+                this.blockedPieces.push(this.piece)
+                
+                this.piece = new Pieces(this.ctx)
+            }
         }, 1000)
     },
     setDimensions() {
@@ -47,23 +55,20 @@ const doctorYai = {
     },
     setEventlisteners() {
         document.onkeyup = (e => {
-            e.keyCode === this.key.RIGHT ? this.piece.move('right') : null
-            e.keyCode === this.key.LEFT ? this.piece.move('left') : null
-            e.keyCode === this.key.DOWN ? this.piece.move('down') : null
+            e.keyCode === this.key.RIGHT ? this.checkPiece(this.piece, 'right') : null
+            e.keyCode === this.key.LEFT ? this.checkPiece(this.piece, 'left') : null
+            // e.keyCode === this.key.DOWN ? this.checkPiece(this.piece, 'down') : null
         })
     },
     clearScreen() {
         this.ctx.clearRect(0, 0, this.size.w, this.size.h)
     },
-    getBkg() {
-        this.boardDrawed = new BoardBackground(this.ctx)
-    },
-    getPiece() {
-        this.piece = new Pieces(this.ctx)
-    },
     drawAll() {
         this.boardDrawed.draw()
         this.piece.draw()
+        this.blockedPieces.forEach(pcs => {
+            pcs.draw()
+        })
     },
     setScore() {
         this.score += 100
@@ -74,5 +79,85 @@ const doctorYai = {
         gameOverScore.innerHTML = score
         reloadGame.onclick(document.location.reload())
         window.clearInterval(this.interval)
-    }
+    },
+    //Metodos del tablero
+    getBkg() {
+        this.boardDrawed = new BoardBackground(this.ctx)
+    },
+    //Metodos de pieces
+    getPiece() {
+        this.piece = new Pieces(this.ctx)
+    },
+    isCollision(piece) {
+        let checkArray = this.boardDrawed.board
+        for (let i = 0; i < checkArray.length; i++) {
+            for (let k = 0; k < checkArray[i].length; k++) {
+                //compruebo si choca con los limites inferior y laterales
+
+                if (piece.posX >= checkArray.length - 1 || piece.posX <= 0 || piece.posY > 13) { // columnas
+                    return true
+                }
+
+                if (!checkArray[i][k] === this.boardDrawed.empty) {
+                    return true
+                }
+            }
+        }
+        return false
+    },
+
+    insideBorders(piece, dir) {
+
+        let checkArray = this.boardDrawed.board
+        //si choca con los laterales, mantengo la pieza en la posicion anterior
+        for (let i = 0; i < checkArray.length; i++) {
+
+            switch (dir) {
+                case 'down':
+                    if (piece.posY > checkArray[i].length - 1) {
+                        piece.posY = checkArray[i].length - 1
+                    };
+                case 'left':
+                    if (piece.posX <= 0) {
+                        piece.posX = 0
+                    };
+                case 'right':
+                    if (piece.posX >= checkArray.length - 1) { // columnas
+                        piece.posX = checkArray.length - 1
+                    };
+            }
+
+        }
+    },
+    checkPiece(piece, dir) {
+
+        piece.move()
+        if (this.isCollision(piece)) {
+            this.insideBorders(piece, 'down')
+            piece.isBlocked = true
+            this.blockedPieces.push(piece)
+
+
+        };
+
+        switch (dir) {
+
+            case 'left':
+                piece.posX--;
+                if (this.isCollision(piece)) {
+                    this.insideBorders(piece, 'left')
+
+                };
+                break;
+
+            case 'right':
+                piece.posX++;
+                if (this.isCollision(piece)) {
+                    this.insideBorders(piece, 'right')
+                };
+                break;
+        }
+
+    },
+
 }

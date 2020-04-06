@@ -3,14 +3,13 @@ class Pieces {
         this.ctx = ctx
         this.unit = 50 // unidad a partir de la cual se renderiza la cuadrícula. Un cuadrado de lado 50.
         this.empty = "white" // color de la unidad vacía
-        this.columns = 10 //valores que pueden variar. Columnas y filas.
-        this.rows = 14
         this.color = this.setColor()
         this.initPiece = [
             [1]
         ]
         this.posX = 4
         this.posY = 0
+        this.isBlocked = false
     }
     setColor() {
         let colours = ['#00CC76', '#B4D2D7', '#B4D2D7']
@@ -37,64 +36,9 @@ class Pieces {
         this.move()
     }
 
-    down() {
-        this.posY++
-        // if (!this.colision) {
-        //     this.posY++
-        // } else {
-        //     //la pieza se para
-        //     //el juego suelta otra pieza
-        // }
-
-    }
-    right() {
-
-        // if (!this.colision) {
-        //     this.posX++
-        // } else {
-        //     //la pieza se para
-        //     //el juego suelta otra pieza
-        // }
-
-    }
-
-    left() {
-
-        // if (!this.colision) {
-        //     this.posX--
-        // } else {
-        //     //la pieza se para
-        //     //el juego suelta otra pieza
-        // }
-    }
-
     move(dir) {
-        dir === 'down' ? this.posY++ : null
-        dir === 'right' ? this.posX++ : null
-        dir === 'left' ? this.posX-- : null
-
-        this.down()
-        this.left()
-        this.right()
-
-        //Límites del tablero, parte de las colisiones
-        if (this.posY >= this.rows - 1) {
-            this.posY = this.rows - 1
-        }
-        if (this.posX >= this.columns - 1) {
-            this.posX = this.columns - 1
-        }
-        if (this.posX <= 0) {
-            this.posX = 0
-        }
+        this.posY++
     }
-
-    colision() {
-        //Hay colision cuando pilla un borde lateral o el de abajo
-        //Hay colision cuando se encuentra con una pieza quieta, entonces se queda ahi
-    }
-
-
 }
 
 
