@@ -114,6 +114,7 @@ const doctorYai = {
     },
 
     collisionBetweenPieces(piece) {
+        //compruebo colision entre piezas
         if (this.blockedPieces.some(pc => piece.posY === pc.posY && piece.posX === pc.posX)) {
             piece.posY--
             piece.isBlocked = true

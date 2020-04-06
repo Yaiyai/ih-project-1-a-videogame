@@ -39,7 +39,7 @@ class Pieces {
     move(dir) {
 
         !this.isBlocked && this.posY++
-        console.log(this.posY)
+        
     }
 }
 
