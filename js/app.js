@@ -39,19 +39,9 @@ const doctorYai = {
             this.clearScreen()
             this.drawAll()
             this.checkPiece(this.piece)
-            if (this.piece.isBlocked) {
+            this.collisionBetweenPieces(this.piece)
+            console.log(this.blockedPieces);
 
-                this.blockedPieces.push(this.piece)
-
-                this.blockedPieces.forEach(pcs => {
-                    pcs.draw()
-                })
-
-                console.log(this.blockedPieces)
-                console.log(this.piece)
-
-                this.piece = new Pieces(this.ctx)
-            }
         }, 700)
     },
     setDimensions() {
@@ -73,6 +63,7 @@ const doctorYai = {
     drawAll() {
         this.boardDrawed.draw()
         this.piece.draw()
+        this.blockedPieces.forEach(pc => pc.draw())
     },
     setScore() {
         this.score += 100
@@ -105,7 +96,8 @@ const doctorYai = {
                 if (piece.posY > checkArray[i].length - 1) {
                     piece.posY = checkArray[i].length - 1
                     piece.isBlocked = true
-
+                    this.blockedPieces.push(piece)
+                    this.piece = new Pieces(this.ctx)
                 }
 
                 if (piece.posX <= 0) {
@@ -116,15 +108,18 @@ const doctorYai = {
                     piece.posX = checkArray.length - 1
                 }
 
-                //compruebo si choca con otra pieza
-
-                if (!checkArray[i][k] === this.boardDrawed.empty) {
-                    piece.isBlocked = true
-
-                }
             }
         }
         return false
+    },
+
+    collisionBetweenPieces(piece) {
+        if (this.blockedPieces.some(pc => piece.posY === pc.posY && piece.posX === pc.posX)) {
+            piece.posY--
+            piece.isBlocked = true
+            this.blockedPieces.push(piece)
+            this.piece = new Pieces(this.ctx)
+        }
     },
 
     checkPiece(piece, dir) {

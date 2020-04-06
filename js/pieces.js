@@ -33,11 +33,13 @@ class Pieces {
                 }
             }
         }
-        this.move()
+
     }
 
     move(dir) {
-        this.posY++
+
+        !this.isBlocked && this.posY++
+        console.log(this.posY)
     }
 }
 
