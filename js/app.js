@@ -42,10 +42,17 @@ const doctorYai = {
             if (this.piece.isBlocked) {
 
                 this.blockedPieces.push(this.piece)
-                
+
+                this.blockedPieces.forEach(pcs => {
+                    pcs.draw()
+                })
+
+                console.log(this.blockedPieces)
+                console.log(this.piece)
+
                 this.piece = new Pieces(this.ctx)
             }
-        }, 1000)
+        }, 700)
     },
     setDimensions() {
         this.size.w = 500
@@ -66,9 +73,6 @@ const doctorYai = {
     drawAll() {
         this.boardDrawed.draw()
         this.piece.draw()
-        this.blockedPieces.forEach(pcs => {
-            pcs.draw()
-        })
     },
     setScore() {
         this.score += 100
@@ -80,81 +84,61 @@ const doctorYai = {
         reloadGame.onclick(document.location.reload())
         window.clearInterval(this.interval)
     },
+
     //Metodos del tablero
     getBkg() {
         this.boardDrawed = new BoardBackground(this.ctx)
     },
+
+
     //Metodos de pieces
     getPiece() {
         this.piece = new Pieces(this.ctx)
     },
     isCollision(piece) {
         let checkArray = this.boardDrawed.board
+
         for (let i = 0; i < checkArray.length; i++) {
             for (let k = 0; k < checkArray[i].length; k++) {
                 //compruebo si choca con los limites inferior y laterales
 
-                if (piece.posX >= checkArray.length - 1 || piece.posX <= 0 || piece.posY > 13) { // columnas
-                    return true
+                if (piece.posY > checkArray[i].length - 1) {
+                    piece.posY = checkArray[i].length - 1
+                    piece.isBlocked = true
+
                 }
 
+                if (piece.posX <= 0) {
+                    piece.posX = 0
+                }
+
+                if (piece.posX >= checkArray.length - 1) { // columnas
+                    piece.posX = checkArray.length - 1
+                }
+
+                //compruebo si choca con otra pieza
+
                 if (!checkArray[i][k] === this.boardDrawed.empty) {
-                    return true
+                    piece.isBlocked = true
+
                 }
             }
         }
         return false
     },
 
-    insideBorders(piece, dir) {
-
-        let checkArray = this.boardDrawed.board
-        //si choca con los laterales, mantengo la pieza en la posicion anterior
-        for (let i = 0; i < checkArray.length; i++) {
-
-            switch (dir) {
-                case 'down':
-                    if (piece.posY > checkArray[i].length - 1) {
-                        piece.posY = checkArray[i].length - 1
-                    };
-                case 'left':
-                    if (piece.posX <= 0) {
-                        piece.posX = 0
-                    };
-                case 'right':
-                    if (piece.posX >= checkArray.length - 1) { // columnas
-                        piece.posX = checkArray.length - 1
-                    };
-            }
-
-        }
-    },
     checkPiece(piece, dir) {
 
         piece.move()
-        if (this.isCollision(piece)) {
-            this.insideBorders(piece, 'down')
-            piece.isBlocked = true
-            this.blockedPieces.push(piece)
-
-
-        };
+        if (this.isCollision(piece)) {};
 
         switch (dir) {
-
             case 'left':
                 piece.posX--;
-                if (this.isCollision(piece)) {
-                    this.insideBorders(piece, 'left')
-
-                };
                 break;
 
             case 'right':
                 piece.posX++;
-                if (this.isCollision(piece)) {
-                    this.insideBorders(piece, 'right')
-                };
                 break;
         }
 
