@@ -39,10 +39,8 @@ const doctorYai = {
             this.clearScreen()
             this.drawAll()
             this.movePiece(this.piece, this.piece.direction)
-
-            // this.blockedPieces.forEach(pc => {
-            //     this.piecesCollision(this.piece, pc) ? console.log('choca') : null
-            // })
+            this.checkSibling()
+            this.checkGameOver()
 
         }, 200)
     },
@@ -53,7 +51,7 @@ const doctorYai = {
         this.canvasDom.setAttribute('height', this.size.h)
     },
     setEventlisteners() {
-        document.onkeyup = (e => {
+        document.onkeydown = (e => {
             e.keyCode === this.key.RIGHT ? this.piece.direction = "right" : null
             e.keyCode === this.key.LEFT ? this.piece.direction = "left" : null
             e.keyCode === this.key.DOWN ? this.movePiece(this.piece, 'down') : null
@@ -67,8 +65,8 @@ const doctorYai = {
         this.piece.draw()
         this.blockedPieces.forEach(pc => pc.draw())
     },
-    setScore() {
-        this.score += 100
+    setScore(points) {
+        this.score += points
         scorePoints.innerHTML = this.score
     },
     reLoad() {
@@ -76,7 +74,7 @@ const doctorYai = {
     },
     gameOver() {
         gameOver.style.display = 'flex'
-        gameOverScore.innerHTML = this.setScore()
+        gameOverScore.innerHTML = this.score
         window.clearInterval(this.interval)
 
         // reloadGame.onclick(() => {
@@ -104,19 +102,9 @@ const doctorYai = {
 
             for (let k = 0; k < checkArray[i].length; k++) {
                 //compruebo si choca con los limites inferior y laterales
-
-                if (piece.posY + 1 > checkArray[i].length - 1) {
+                if (piece.posY >= checkArray[i].length - 1 || piece.posX <= 0 || piece.posX >= checkArray.length - 1) {
                     return true
                 }
-
-                if (piece.posX - 1 < 0) {
-                    return true
-                }
-
-                if (piece.posX + 1 >= checkArray.length - 1) {
-                    return true
-                }
-
             }
         }
         return false
@@ -129,11 +117,41 @@ const doctorYai = {
             item1.posY + 1 > item2.posY
     },
 
+    checkSibling() {
+        let target = this.blockedPieces[this.blockedPieces.length - 1]
+
+        this.blockedPieces.forEach(pc => {
+            if (target.posY === pc.posY && target.posX === pc.posX + 1) {
+                if (target.color === pc.color) {
+                    console.log('igual en misma Y, por la derecha')
+                    this.blockedPieces.pop()
+                    this.blockedPieces.splice(pc, 1)
+                    this.setScore(100)
+                }
+            } else if (target.posY === pc.posY && target.posX === pc.posX - 1) {
+                if (target.color === pc.color) {
+                    console.log('igual en misma Y, por la izquierda')
+                    this.blockedPieces.pop()
+                    this.blockedPieces.splice(pc, 1)
+                    this.setScore(100)
+                }
+            } else if (target.posY === pc.posY - 1 && target.posX === pc.posX) {
+                if (target.color === pc.color) {
+                    console.log('igual en misma X')
+                    this.blockedPieces.pop()
+                    this.blockedPieces.splice(pc, 1)
+                    this.setScore(100)
+                }
+            }
+        })
+
+        return false
+    },
+
 
     movePiece(piece, dir) {
-        let checkArray = this.boardDrawed.board
-        console.log(piece.posX, piece.direction, piece.posY)
-
+        let checkBoardRows = this.boardDrawed.rows
+        let checkBoardColumns = this.boardDrawed.columns
 
         switch (dir) {
             case 'left':
@@ -150,7 +168,7 @@ const doctorYai = {
                 piece.direction = 'down'
                 if (this.blockedPieces.some(pc => pc.posX === piece.posX + 1 && pc.posY === piece.posY)) {
                     piece.posX = piece.posX
-                } else if (piece.posX >= 9) {
+                } else if (piece.posX >= checkBoardColumns - 1) {
                     piece.posX = 9
                 } else {
                     piece.posX++;
@@ -158,10 +176,10 @@ const doctorYai = {
                 break;
             default:
                 piece.direction = 'down'
-                if (this.blockedPieces.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1) || piece.posY >= 13) {
+                if (this.blockedPieces.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1) || piece.posY >= checkBoardRows - 1) {
                     piece.isBlocked = true
                     this.blockedPieces.push(piece)
-                    //checkSibling
+
                     this.piece = new Pieces(this.ctx)
                 } else {
                     piece.posY++;
