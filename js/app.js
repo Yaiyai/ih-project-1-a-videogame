@@ -120,26 +120,26 @@ const doctorYai = {
     checkSibling() {
         let target = this.blockedPieces[this.blockedPieces.length - 1]
 
-        this.blockedPieces.forEach(pc => {
+        this.blockedPieces.forEach((pc, index) => {
             if (target.posY === pc.posY && target.posX === pc.posX + 1) {
                 if (target.color === pc.color) {
                     console.log('igual en misma Y, por la derecha')
                     this.blockedPieces.pop()
-                    this.blockedPieces.splice(pc, 1)
+                    this.blockedPieces.splice(index, 1)
                     this.setScore(100)
                 }
             } else if (target.posY === pc.posY && target.posX === pc.posX - 1) {
                 if (target.color === pc.color) {
                     console.log('igual en misma Y, por la izquierda')
                     this.blockedPieces.pop()
-                    this.blockedPieces.splice(pc, 1)
+                    this.blockedPieces.splice(index, 1)
                     this.setScore(100)
                 }
             } else if (target.posY === pc.posY - 1 && target.posX === pc.posX) {
                 if (target.color === pc.color) {
                     console.log('igual en misma X')
                     this.blockedPieces.pop()
-                    this.blockedPieces.splice(pc, 1)
+                    this.blockedPieces.splice(index, 1)
                     this.setScore(100)
                 }
             }
