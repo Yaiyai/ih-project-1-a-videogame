@@ -148,6 +148,14 @@ const doctorYai = {
         return false
     },
 
+    goingDown() {
+        this.blockedPieces.some(pc => {
+            if (this.checkSibling) {
+                pc.posY++
+            }
+        })
+    },
+
 
     movePiece(piece, dir) {
         let checkBoardRows = this.boardDrawed.rows
@@ -179,7 +187,6 @@ const doctorYai = {
                 if (this.blockedPieces.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1) || piece.posY >= checkBoardRows - 1) {
                     piece.isBlocked = true
                     this.blockedPieces.push(piece)
-
                     this.piece = new Pieces(this.ctx)
                 } else {
                     piece.posY++;
