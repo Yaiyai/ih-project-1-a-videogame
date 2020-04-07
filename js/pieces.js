@@ -8,11 +8,11 @@ class Pieces {
             [1]
         ]
         this.posX = 4
-        this.posY = 0
+        this.posY = -1
         this.isBlocked = false
     }
     setColor() {
-        let colours = ['#00CC76', '#B4D2D7', '#B4D2D7']
+        let colours = ['#00CC76', '#B4D2D7', '#B4D2D7', 'red', 'pink', 'blue']
         return colours[Math.floor(Math.random() * colours.length)]
     }
     drawUnit(x, y) {
@@ -37,9 +37,12 @@ class Pieces {
     }
 
     move(dir) {
-
         !this.isBlocked && this.posY++
-        
+
+        if (dir === 'down') {
+            !this.isBlocked && this.posY++
+        }
+
     }
 }
 

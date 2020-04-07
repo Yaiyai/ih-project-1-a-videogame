@@ -40,9 +40,9 @@ const doctorYai = {
             this.drawAll()
             this.checkPiece(this.piece)
             this.collisionBetweenPieces(this.piece)
-            console.log(this.blockedPieces);
-
-        }, 700)
+            this.piecesDestruction(this.piece)
+            this.checkGameOver()
+        }, 30)
     },
     setDimensions() {
         this.size.w = 500
@@ -51,7 +51,7 @@ const doctorYai = {
         this.canvasDom.setAttribute('height', this.size.h)
     },
     setEventlisteners() {
-        document.onkeyup = (e => {
+        document.onkeydown = (e => {
             e.keyCode === this.key.RIGHT ? this.checkPiece(this.piece, 'right') : null
             e.keyCode === this.key.LEFT ? this.checkPiece(this.piece, 'left') : null
             // e.keyCode === this.key.DOWN ? this.checkPiece(this.piece, 'down') : null
@@ -69,11 +69,12 @@ const doctorYai = {
         this.score += 100
         scorePoints.innerHTML = this.score
     },
-    gameOver(score) {
-        gameOver.style.display = 'flex'
-        gameOverScore.innerHTML = score
-        reloadGame.onclick(document.location.reload())
-        window.clearInterval(this.interval)
+    gameOver() {
+        alert('game over')
+        // gameOver.style.display = 'flex'
+        // gameOverScore.innerHTML = score
+        // reloadGame.onclick(document.location.reload())
+        // window.clearInterval(this.interval)
     },
 
     //Metodos del tablero
@@ -100,7 +101,7 @@ const doctorYai = {
                     this.piece = new Pieces(this.ctx)
                 }
 
-                if (piece.posX <= 0) {
+                if (piece.posX < 0) {
                     piece.posX = 0
                 }
 
@@ -108,9 +109,14 @@ const doctorYai = {
                     piece.posX = checkArray.length - 1
                 }
 
+
             }
         }
         return false
+    },
+
+    checkGameOver() {
+        this.blockedPieces.some(pc => pc.posY < 0) && this.gameOver()
     },
 
     collisionBetweenPieces(piece) {
@@ -123,17 +129,41 @@ const doctorYai = {
         }
     },
 
-    checkPiece(piece, dir) {
+    piecesDestruction(piece) {
 
+        if (this.blockedPieces.find(pc => piece.posX - 1 === pc.posX && piece.color === pc.color)) {
+            console.log('mismo color')
+        }
+
+
+
+    },
+    // this.blockedPieces.some(pc => {
+    //     if (piece.color === pc.color) {
+    //         let lastPiece = this.blockedPieces[this.blockedPieces.length - 1]
+    //         this.blockedPieces.splice(lastPiece, 1)
+    //     }
+    // })
+
+    // if (this.blockedPieces.some(pc => piece.posY === pc.posY && piece.color === pc.color)) {
+    //     console.log('sameY')
+    // }
+
+    movePiece(piece, dir) {
+        //comprobaciones antes de mover
         piece.move()
         if (this.isCollision(piece)) {};
 
         switch (dir) {
             case 'left':
+                //canMove
+                
+                piece.posY--;
                 piece.posX--;
                 break;
 
             case 'right':
+                piece.posY--;
                 piece.posX++;
                 break;
         }
