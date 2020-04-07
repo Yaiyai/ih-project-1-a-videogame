@@ -2,14 +2,16 @@ class Pieces {
     constructor(ctx) {
         this.ctx = ctx
         this.unit = 50 // unidad a partir de la cual se renderiza la cuadrícula. Un cuadrado de lado 50.
-        this.empty = "white" // color de la unidad vacía
+        this.empty = 'white' // color de la unidad vacía
         this.color = this.setColor()
         this.initPiece = [
             [1]
         ]
         this.posX = 4
         this.posY = -1
+        this.direction = 'down'
         this.isBlocked = false
+
     }
     setColor() {
         let colours = ['#00CC76', '#B4D2D7', '#B4D2D7', 'red', 'pink', 'blue']
@@ -19,7 +21,7 @@ class Pieces {
         this.ctx.fillStyle = this.color
         this.ctx.fillRect(x * this.unit, y * this.unit, this.unit, this.unit)
 
-        this.ctx.strokeStyle = '#07485E? '
+        this.ctx.strokeStyle = '#07485E'
         this.ctx.strokeRect(x * this.unit, y * this.unit, this.unit, this.unit)
     }
 

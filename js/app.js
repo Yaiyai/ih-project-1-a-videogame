@@ -40,7 +40,7 @@ const doctorYai = {
             this.drawAll()
             this.checkPiece(this.piece)
             this.collisionBetweenPieces(this.piece)
-            this.piecesDestruction(this.piece)
+
             this.checkGameOver()
         }, 30)
     },
@@ -69,12 +69,17 @@ const doctorYai = {
         this.score += 100
         scorePoints.innerHTML = this.score
     },
+    reLoad() {
+        document.location.reload()
+    },
     gameOver() {
-        alert('game over')
-        // gameOver.style.display = 'flex'
-        // gameOverScore.innerHTML = score
-        // reloadGame.onclick(document.location.reload())
-        // window.clearInterval(this.interval)
+        gameOver.style.display = 'flex'
+        gameOverScore.innerHTML = this.setScore()
+        window.clearInterval(this.interval)
+
+        // reloadGame.onclick(() => {
+        //     this.init()
+        // })
     },
 
     //Metodos del tablero
@@ -129,27 +134,8 @@ const doctorYai = {
         }
     },
 
-    piecesDestruction(piece) {
 
-        if (this.blockedPieces.find(pc => piece.posX - 1 === pc.posX && piece.color === pc.color)) {
-            console.log('mismo color')
-        }
-
-
-
-    },
-    // this.blockedPieces.some(pc => {
-    //     if (piece.color === pc.color) {
-    //         let lastPiece = this.blockedPieces[this.blockedPieces.length - 1]
-    //         this.blockedPieces.splice(lastPiece, 1)
-    //     }
-    // })
-
-    // if (this.blockedPieces.some(pc => piece.posY === pc.posY && piece.color === pc.color)) {
-    //     console.log('sameY')
-    // }
-
-    movePiece(piece, dir) {
+    checkPiece(piece, dir) {
         //comprobaciones antes de mover
         piece.move()
         if (this.isCollision(piece)) {};
@@ -157,7 +143,7 @@ const doctorYai = {
         switch (dir) {
             case 'left':
                 //canMove
-                
+
                 piece.posY--;
                 piece.posX--;
                 break;
