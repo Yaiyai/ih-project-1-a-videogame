@@ -10,7 +10,7 @@ const doctorYai = {
         w: undefined,
         h: undefined
     },
-    fps: 24,
+    fps: 35,
     framesCounter: 0,
     interval: undefined,
     key: {
@@ -41,8 +41,10 @@ const doctorYai = {
             this.movePiece(this.piece, this.piece.direction)
             this.checkSibling()
             this.checkGameOver()
+            // console.log(this.boardDrawed.board[4][13])
+            this.levelUp()
 
-        }, 200)
+        }, 12000 / this.fps)
     },
     setDimensions() {
         this.size.w = 500
@@ -68,6 +70,16 @@ const doctorYai = {
     setScore(points) {
         this.score += points
         scorePoints.innerHTML = this.score
+
+    },
+    //revisar los levelUPS
+    levelUp() {
+        if (this.score >= 200) {
+            console.log('otro nivel')
+            this.clearScreen()
+            this.drawAll()
+            this.fps = 50
+        }
     },
     reLoad() {
         document.location.reload()
@@ -126,21 +138,26 @@ const doctorYai = {
                     console.log('igual en misma Y, por la derecha')
                     this.blockedPieces.pop()
                     this.blockedPieces.splice(index, 1)
-                    this.setScore(100)
+                    //si vacío el tablero, se suman 1000 puntos, si solo emparejo, 100
+                    this.blockedPieces.length === 0 ? this.setScore(1000) : this.setScore(100)
+
+                    // this.goingDown()
                 }
             } else if (target.posY === pc.posY && target.posX === pc.posX - 1) {
                 if (target.color === pc.color) {
                     console.log('igual en misma Y, por la izquierda')
                     this.blockedPieces.pop()
                     this.blockedPieces.splice(index, 1)
-                    this.setScore(100)
+                    this.blockedPieces.length === 0 ? this.setScore(1000) : this.setScore(100)
+
                 }
             } else if (target.posY === pc.posY - 1 && target.posX === pc.posX) {
                 if (target.color === pc.color) {
                     console.log('igual en misma X')
                     this.blockedPieces.pop()
                     this.blockedPieces.splice(index, 1)
-                    this.setScore(100)
+                    this.blockedPieces.length === 0 ? this.setScore(1000) : this.setScore(100)
+
                 }
             }
         })
@@ -150,11 +167,29 @@ const doctorYai = {
 
     goingDown() {
         this.blockedPieces.some(pc => {
-            if (this.checkSibling) {
+            if (pc.posY + 1 === this.boardDrawed.board.empty) {
                 pc.posY++
             }
         })
     },
+
+
+    changeBoard(piece) {
+        let checkArray = this.boardDrawed.board
+
+        if (piece.isBlocked) {
+            for (let i = 0; i < checkArray.length; i++) {
+
+                for (let k = 0; k < checkArray[i].length; k++) {
+
+                    checkArray[i][k] = piece.color
+                }
+            }
+        }
+
+    },
+
+
 
 
     movePiece(piece, dir) {
@@ -187,7 +222,7 @@ const doctorYai = {
                 if (this.blockedPieces.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1) || piece.posY >= checkBoardRows - 1) {
                     piece.isBlocked = true
                     this.blockedPieces.push(piece)
-                    this.piece = new Pieces(this.ctx)
+                    this.getPiece()
                 } else {
                     piece.posY++;
                 }
