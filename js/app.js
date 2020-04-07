@@ -38,11 +38,13 @@ const doctorYai = {
         this.interval = setInterval(() => {
             this.clearScreen()
             this.drawAll()
-            this.checkPiece(this.piece)
-            this.collisionBetweenPieces(this.piece)
+            this.movePiece(this.piece, this.piece.direction)
 
-            this.checkGameOver()
-        }, 30)
+            // this.blockedPieces.forEach(pc => {
+            //     this.piecesCollision(this.piece, pc) ? console.log('choca') : null
+            // })
+
+        }, 200)
     },
     setDimensions() {
         this.size.w = 500
@@ -51,10 +53,10 @@ const doctorYai = {
         this.canvasDom.setAttribute('height', this.size.h)
     },
     setEventlisteners() {
-        document.onkeydown = (e => {
-            e.keyCode === this.key.RIGHT ? this.checkPiece(this.piece, 'right') : null
-            e.keyCode === this.key.LEFT ? this.checkPiece(this.piece, 'left') : null
-            // e.keyCode === this.key.DOWN ? this.checkPiece(this.piece, 'down') : null
+        document.onkeyup = (e => {
+            e.keyCode === this.key.RIGHT ? this.piece.direction = "right" : null
+            e.keyCode === this.key.LEFT ? this.piece.direction = "left" : null
+            e.keyCode === this.key.DOWN ? this.movePiece(this.piece, 'down') : null
         })
     },
     clearScreen() {
@@ -81,78 +83,93 @@ const doctorYai = {
         //     this.init()
         // })
     },
+    checkGameOver() {
+        this.blockedPieces.some(pc => pc.posY < 0) && this.gameOver()
+    },
 
     //Metodos del tablero
     getBkg() {
         this.boardDrawed = new BoardBackground(this.ctx)
     },
 
-
     //Metodos de pieces
     getPiece() {
         this.piece = new Pieces(this.ctx)
     },
-    isCollision(piece) {
+
+    borderCollision(piece) {
         let checkArray = this.boardDrawed.board
 
         for (let i = 0; i < checkArray.length; i++) {
+
             for (let k = 0; k < checkArray[i].length; k++) {
                 //compruebo si choca con los limites inferior y laterales
 
-                if (piece.posY > checkArray[i].length - 1) {
-                    piece.posY = checkArray[i].length - 1
-                    piece.isBlocked = true
-                    this.blockedPieces.push(piece)
-                    this.piece = new Pieces(this.ctx)
+                if (piece.posY + 1 > checkArray[i].length - 1) {
+                    return true
                 }
 
-                if (piece.posX < 0) {
-                    piece.posX = 0
+                if (piece.posX - 1 < 0) {
+                    return true
                 }
 
-                if (piece.posX >= checkArray.length - 1) { // columnas
-                    piece.posX = checkArray.length - 1
+                if (piece.posX + 1 >= checkArray.length - 1) {
+                    return true
                 }
-
 
             }
         }
         return false
     },
 
-    checkGameOver() {
-        this.blockedPieces.some(pc => pc.posY < 0) && this.gameOver()
-    },
-
-    collisionBetweenPieces(piece) {
-        //compruebo colision entre piezas
-        if (this.blockedPieces.some(pc => piece.posY === pc.posY && piece.posX === pc.posX)) {
-            piece.posY--
-            piece.isBlocked = true
-            this.blockedPieces.push(piece)
-            this.piece = new Pieces(this.ctx)
-        }
+    piecesCollision(item1, item2) {
+        return item1.posX < item2.posX + 1 &&
+            item1.posX + 1 > item2.posX &&
+            item1.posY < item2.posY + 1 &&
+            item1.posY + 1 > item2.posY
     },
 
 
-    checkPiece(piece, dir) {
-        //comprobaciones antes de mover
-        piece.move()
-        if (this.isCollision(piece)) {};
+    movePiece(piece, dir) {
+        let checkArray = this.boardDrawed.board
+        console.log(piece.posX, piece.direction, piece.posY)
+
 
         switch (dir) {
             case 'left':
-                //canMove
-
-                piece.posY--;
-                piece.posX--;
+                piece.direction = 'down'
+                if (this.blockedPieces.some(pc => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
+                    piece.posX = piece.posX
+                } else if (piece.posX <= 0) {
+                    piece.posX = 0
+                } else {
+                    piece.posX--;
+                }
                 break;
-
             case 'right':
-                piece.posY--;
-                piece.posX++;
+                piece.direction = 'down'
+                if (this.blockedPieces.some(pc => pc.posX === piece.posX + 1 && pc.posY === piece.posY)) {
+                    piece.posX = piece.posX
+                } else if (piece.posX >= 9) {
+                    piece.posX = 9
+                } else {
+                    piece.posX++;
+                }
                 break;
+            default:
+                piece.direction = 'down'
+                if (this.blockedPieces.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1) || piece.posY >= 13) {
+                    piece.isBlocked = true
+                    this.blockedPieces.push(piece)
+                    //checkSibling
+                    this.piece = new Pieces(this.ctx)
+                } else {
+                    piece.posY++;
+                }
+                break;
+
         }
+
 
     },
 
