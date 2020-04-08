@@ -1,64 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <!-- css files -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  <!-- css files -->
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+    <title>Dr. Yai || A Game</title>
+  </head>
 
-  <title>Dr. Yai || A Game</title>
-</head>
-
-<body>
-  <section id="game">
-    <article id="game-over">
-      <article id="pop-up">
-        <h3>game over</h3>
-        <p>Your score is:</p>
-        <p id="score-game-over">2000</p>
-        <button id="reload-game">restart game</button>
+  <body>
+    <section id="game">
+      <article id="game-over">
+        <article id="pop-up">
+          <h3>game over</h3>
+          <p>Your score is:</p>
+          <p id="score-game-over">2000</p>
+          <button id="reload-game">restart game</button>
+        </article>
       </article>
-    </article>
 
-    <article id="init-game">
-      <figure id="logo">
-        <img src="img/logo.png" alt="Logo Dr.Yai Game" />
-      </figure>
-
-      <button id="start-game">start game</button>
-
-      <p id="instructions">Just a game like Tetris, but easier.</p>
-      <p id="instructions">Just a game like Dr. Mario, but simplier.</p>
-      <p id="instructions">
-        This is gonna be easy-peasy. Left-key to go left, right-key to go
-        right and down-key to speed the piece down.
-      </p>
-      <p id="instructions">
-        To score points you'll have to match 2 or more virus in the same
-        color.
-      </p>
-    </article>
-
-    <article id="my-canvas">
-      <div id="on-game">
+      <article id="init-game">
         <figure id="logo">
-          <img src="img/mini-logo.png" alt="Logo Dr.Yai Game" />
+          <img src="img/logo.png" alt="Logo Dr.Yai Game" />
         </figure>
-        <p id="score-live">000000</p>
-      </div>
 
-      <canvas id="my-tetris"></canvas>
-    </article>
-  </section>
+        <button id="start-game">start game</button>
 
-  <!-- JS files -->
-  <script src="js/bkg.js"></script>
-  <script src="js/pieces.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/index.js"></script>
-</body>
+        <p id="instructions">Just a game like Tetris, but easier.</p>
+        <p id="instructions">Just a game like Dr. Mario, but simplier.</p>
+        <p id="instructions">
+          This is gonna be easy-peasy. Left-key to go left, right-key to go
+          right and down-key to speed the piece down.
+        </p>
+        <p id="instructions">
+          To score points you'll have to match 2 or more virus in the same
+          color.
+        </p>
+      </article>
 
+      <article id="my-canvas">
+        <div id="on-game">
+          <figure id="logo">
+            <img src="img/mini-logo.png" alt="Logo Dr.Yai Game" />
+          </figure>
+          <p id="level">level <span>1</span></p>
+          <p id="score-live">000000</p>
+        </div>
+
+        <canvas id="my-tetris"></canvas>
+      </article>
+    </section>
+
+    <!-- JS files -->
+    <script src="js/bkg.js"></script>
+    <script src="js/pieces.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/index.js"></script>
+  </body>
 </html>

@@ -70,6 +70,12 @@ img {
     color: #0B799D;
 }
 
+#my-canvas #on-game p#level {
+    text-align: center;
+    padding-right: 40px;
+    text-transform: uppercase;
+}
+
 
 /* game-over */
 #game-over {

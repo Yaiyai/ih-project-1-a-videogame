@@ -14,7 +14,7 @@ class Pieces {
 
     }
     setColor() {
-        let colours = ['#00CC76', '#B4D2D7', '#B4D2D7', 'red', 'pink', 'blue']
+        let colours = ['#00CC76', '#B4D2D7', '#0B799D', 'red', 'pink', 'blue']
         return colours[Math.floor(Math.random() * colours.length)]
     }
     drawUnit(x, y) {
