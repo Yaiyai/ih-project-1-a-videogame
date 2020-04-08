@@ -1,4 +1,4 @@
-let scorePoints = document.getElementById("score-live")
+let scorePoints = document.querySelector("#score-live > span")
 let levelText = document.querySelector('#level > span')
 
 let gameOver = document.getElementById("game-over")
@@ -7,7 +7,7 @@ let reloadGame = document.getElementById("reload-game")
 let levelGameOver = document.querySelector('#level-game-over > span')
 
 let newLevel = document.getElementById('new-level')
-let levelScore = document.querySelector('#level > span')
+let levelScore = document.querySelector('#level-new > span')
 let nextLevel = document.getElementById('next-level')
 
 
@@ -19,7 +19,8 @@ const doctorYai = {
         h: undefined,
     },
     speed: 300,
-    frameCounter: 300,
+    timeLimit: 300,
+    frameCounter: 0,
     interval: undefined,
     key: {
         SPACE: 32,
@@ -36,6 +37,8 @@ const doctorYai = {
     init() {
         this.canvasDom = document.getElementById("my-tetris")
         this.ctx = this.canvasDom.getContext("2d")
+        levelText.innerHTML = this.level
+        levelText.style.color = 'red'
         this.setDimensions()
         this.start()
     },
@@ -46,17 +49,18 @@ const doctorYai = {
         this.setEventlisteners()
 
         this.interval = setInterval(() => {
-            levelText.innerHTML = this.level
-            this.frameCounter--
+            this.frameCounter++
+            this.frameCounter === 1000 ? this.frameCounter = 0 : null
+            this.timeLimit--
             this.clearScreen()
             this.drawAll()
             this.movePiece(this.piece, this.piece.direction)
             this.checkSibling()
             this.goingDown()
             this.moreLevel()
-            this.frameCounter === 0 && this.gameOver()
+            this.timeLimit === 0 && this.gameOver()
             this.checkGameOver()
-
+            console.log(this.speed, this.timeLimit)
         }, this.speed)
 
     },
@@ -83,7 +87,7 @@ const doctorYai = {
     drawAll() {
         this.boardDrawed.draw()
         this.piece.draw()
-        this.blockedPieces.forEach((pc) => pc.draw())
+        this.blockedPieces.forEach(pc => pc.draw())
     },
 
     //Métodos de puntuación y nivel
@@ -93,39 +97,43 @@ const doctorYai = {
     },
 
     moreLevel() {
-        if (this.score == 1000) {
-            this.levelUp(1)
+        if (this.level === 1 && this.score >= 300) {
+            this.levelUp(2, 250, 300)
+        }
+        if (this.level === 2 && this.score >= 700) {
+            this.levelUp(3, 200, 400)
+        }
+        if (this.level === 3 && this.score >= 1500) {
+            this.levelUp(4, 200, 350)
         }
     },
 
-    levelUp(level) {
+    levelUp(level, speed, timer) {
         newLevel.style.display = "flex"
-        levelScore.innerHTML = this.level + level
+        levelScore.innerHTML = level
 
         nextLevel.onclick = () => {
             this.start()
+
+            this.level = level
+            levelText.innerHTML = this.level
             newLevel.style.display = "none"
-            this.score = 0
-            this.level = this.level + level
+
             this.blockedPieces = []
-            scorePoints.innerHTML = this.score
-            levelText.innerHTML = this.level + level
+            this.timeLimit = timer
+            this.speed = speed
         }
     },
 
     //Metodos del game over
-    reLoad() {
-        document.location.reload()
-    },
-
     gameOver() {
+        clearInterval(this.interval)
         gameOver.style.display = "flex"
         gameOverScore.innerHTML = this.score
-        levelGameOver.innerHTML = this.level
-        window.clearInterval(this.interval)
+        levelGameOver.innerHTML = levelText.innerHTML
 
         reloadGame.onclick = () => {
-            this.reLoad()
+            document.location.reload()
         }
     },
 
@@ -209,11 +217,11 @@ const doctorYai = {
                         //Pieza valorada fuera.
                         this.blockedPieces.splice(index, 1)
                         //si vacío el tablero, se suman 350 puntos, si solo emparejo, 100.
-                        this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
+                        this.blockedPieces.length === 0 ? this.setScore(150) : this.setScore(50)
                     }
                 }
             }
-
+            //Eliminación a 3 piezas del mismo color
             this.blockedPieces.forEach((pc2, index2) => {
                 if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX + 1 && target.posX === pc2.posX + 2) {
                     if (target.color === pc.color && target.color === pc2.color) {
@@ -221,7 +229,7 @@ const doctorYai = {
                             this.blockedPieces.pop()
                             this.blockedPieces.splice(index, 1)
                             this.blockedPieces.splice(index2, 1)
-                            this.blockedPieces.length === 0 ? this.setScore(450) : this.setScore(200)
+                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(200)
 
                         }
                     }
@@ -233,7 +241,7 @@ const doctorYai = {
                             this.blockedPieces.pop()
                             this.blockedPieces.splice(index, 1)
                             this.blockedPieces.splice(index2, 1)
-                            this.blockedPieces.length === 0 ? this.setScore(450) : this.setScore(200)
+                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
 
                         }
                     }
@@ -245,7 +253,7 @@ const doctorYai = {
                             this.blockedPieces.pop()
                             this.blockedPieces.splice(index, 1)
                             this.blockedPieces.splice(index2, 1)
-                            this.blockedPieces.length === 0 ? this.setScore(450) : this.setScore(200)
+                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
 
                         }
                     }
@@ -257,14 +265,12 @@ const doctorYai = {
                             this.blockedPieces.pop()
                             this.blockedPieces.splice(index, 1)
                             this.blockedPieces.splice(index2, 1)
-                            this.blockedPieces.length === 0 ? this.setScore(450) : this.setScore(200)
+                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
 
                         }
                     }
                 }
             }) //Segundo for each
-
-
 
         }) //Primer for each
     },
