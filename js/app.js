@@ -53,9 +53,9 @@ const doctorYai = {
             this.movePiece(this.piece, this.piece.direction)
             this.checkSibling()
             this.goingDown()
-            // this.moreLevel()
-            // this.frameCounter === 0 && this.gameOver()
-            // this.checkGameOver()
+            this.moreLevel()
+            this.frameCounter === 0 && this.gameOver()
+            this.checkGameOver()
 
         }, this.speed)
 
@@ -93,7 +93,7 @@ const doctorYai = {
     },
 
     moreLevel() {
-        if (this.score == 100) {
+        if (this.score == 1000) {
             this.levelUp(1)
         }
     },
@@ -103,7 +103,7 @@ const doctorYai = {
         levelScore.innerHTML = this.level + level
 
         nextLevel.onclick = () => {
-            this.init()
+            this.start()
             newLevel.style.display = "none"
             this.score = 0
             this.level = this.level + level
@@ -199,6 +199,7 @@ const doctorYai = {
         let target = this.blockedPieces[this.blockedPieces.length - 1]
         //Reviso las posiciones ocupadas alrededor de la última pieza bloqueada. Si coinciden en color, las elimino
         this.blockedPieces.forEach((pc, index) => {
+
             if (target.posY === pc.posY && target.posX === pc.posX + 1 || target.posY === pc.posY && target.posX === pc.posX - 1 || target.posY === pc.posY - 1 && target.posX === pc.posX) {
                 if (target.color === pc.color) {
                     //Solo se eliminan dos a dos estos colores.
@@ -212,7 +213,60 @@ const doctorYai = {
                     }
                 }
             }
-        })
+
+            this.blockedPieces.forEach((pc2, index2) => {
+                if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX + 1 && target.posX === pc2.posX + 2) {
+                    if (target.color === pc.color && target.color === pc2.color) {
+                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                            this.blockedPieces.pop()
+                            this.blockedPieces.splice(index, 1)
+                            this.blockedPieces.splice(index2, 1)
+                            this.blockedPieces.length === 0 ? this.setScore(450) : this.setScore(200)
+
+                        }
+                    }
+                }
+
+                if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX - 2) {
+                    if (target.color === pc.color && target.color === pc2.color) {
+                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                            this.blockedPieces.pop()
+                            this.blockedPieces.splice(index, 1)
+                            this.blockedPieces.splice(index2, 1)
+                            this.blockedPieces.length === 0 ? this.setScore(450) : this.setScore(200)
+
+                        }
+                    }
+                }
+
+                if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX + 1) {
+                    if (target.color === pc.color && target.color === pc2.color) {
+                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                            this.blockedPieces.pop()
+                            this.blockedPieces.splice(index, 1)
+                            this.blockedPieces.splice(index2, 1)
+                            this.blockedPieces.length === 0 ? this.setScore(450) : this.setScore(200)
+
+                        }
+                    }
+                }
+
+                if (target.posX === pc.posX && target.posX === pc2.posX && target.posY === pc.posY - 1 && target.posY === pc2.posY - 2) {
+                    if (target.color === pc.color && target.color === pc2.color) {
+                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                            this.blockedPieces.pop()
+                            this.blockedPieces.splice(index, 1)
+                            this.blockedPieces.splice(index2, 1)
+                            this.blockedPieces.length === 0 ? this.setScore(450) : this.setScore(200)
+
+                        }
+                    }
+                }
+            }) //Segundo for each
+
+
+
+        }) //Primer for each
     },
 
     goingDown() {
