@@ -1,6 +1,9 @@
 let scorePoints = document.querySelector("#score-live > span")
 let levelText = document.querySelector('#level > span')
 
+let timerMinutes = document.getElementById('mins')
+let timerSeconds = document.getElementById('secs')
+
 let gameOver = document.getElementById("game-over")
 let gameOverScore = document.getElementById("score-game-over")
 let reloadGame = document.getElementById("reload-game")
@@ -18,8 +21,8 @@ const doctorYai = {
         w: undefined,
         h: undefined,
     },
-    speed: 300,
-    timeLimit: 300,
+    fps: 3,
+    timeLimit: 200,
     frameCounter: 0,
     interval: undefined,
     key: {
@@ -49,19 +52,20 @@ const doctorYai = {
         this.setEventlisteners()
 
         this.interval = setInterval(() => {
+            this.setTimer()
             this.frameCounter++
             this.frameCounter === 1000 ? this.frameCounter = 0 : null
             this.timeLimit--
+            this.timeLimit === 0 && this.gameOver()
             this.clearScreen()
             this.drawAll()
             this.movePiece(this.piece, this.piece.direction)
             this.checkSibling()
             this.goingDown()
             this.moreLevel()
-            this.timeLimit === 0 && this.gameOver()
             this.checkGameOver()
-            console.log(this.speed, this.timeLimit)
-        }, this.speed)
+            console.log(this.fps, this.timeLimit)
+        }, 1000 / this.fps)
 
     },
 
@@ -98,17 +102,24 @@ const doctorYai = {
 
     moreLevel() {
         if (this.level === 1 && this.score >= 300) {
-            this.levelUp(2, 250, 300)
+            this.levelUp(2, 4, 300)
         }
         if (this.level === 2 && this.score >= 700) {
-            this.levelUp(3, 200, 400)
+            this.levelUp(3, 5, 250)
         }
         if (this.level === 3 && this.score >= 1500) {
-            this.levelUp(4, 200, 350)
+            this.levelUp(4, 6, 300)
+        }
+        if (this.level === 4 && this.score >= 2500) {
+            this.levelUp(5, 7, 250)
+        }
+        if (this.level === 5 && this.score >= 4000) {
+            this.levelUp(6, 8, 250)
         }
     },
 
-    levelUp(level, speed, timer) {
+    levelUp(level, fps, timer) {
+        clearInterval(this.interval)
         newLevel.style.display = "flex"
         levelScore.innerHTML = level
 
@@ -121,7 +132,7 @@ const doctorYai = {
 
             this.blockedPieces = []
             this.timeLimit = timer
-            this.speed = speed
+            this.fps = fps
         }
     },
 
@@ -285,4 +296,32 @@ const doctorYai = {
             }
         })
     },
+
+    //timer
+    getMinutes() {
+        return Math.floor((this.timeLimit / this.fps) / 60)
+    },
+    getSeconds() {
+        return Math.floor((this.timeLimit / this.fps) - this.getMinutes() * 60)
+    },
+    twoDigitsNumber(num) {
+        const twoDigits = num.toString()
+
+        let sumDigits = ""
+
+        if (twoDigits.length === 1) {
+            sumDigits = "0" + twoDigits
+        } else {
+            sumDigits = twoDigits
+        }
+
+        return sumDigits
+    },
+    setTimer() {
+        timerSeconds.innerHTML = this.twoDigitsNumber(this.getSeconds())
+        timerMinutes.innerHTML = this.twoDigitsNumber(this.getMinutes())
+    }
+
+
+
 }

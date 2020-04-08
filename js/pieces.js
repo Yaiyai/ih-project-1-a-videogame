@@ -5,7 +5,7 @@ class Pieces {
         this.empty = 'white' // color de la unidad vacía
         this.color = this.setColor()
         this.initPiece = [
-            [1] 
+            [1]
         ]
         this.posX = 4
         this.posY = -1
