@@ -143,17 +143,6 @@ const doctorYai = {
         this.piece = new Pieces(this.ctx)
     },
 
-    piecesCollision(item1, item2) {
-        //La width o height de la pieza es la unidad de medida, 1 columna o 1 fila.
-        return (
-            item1.posX < item2.posX + 1 &&
-            item1.posX + 1 > item2.posX &&
-            item1.posY < item2.posY + 1 &&
-            item1.posY + 1 > item2.posY
-
-        )
-    },
-
     movePiece(piece, dir) {
         let checkBoardRows = this.boardDrawed.rows
         let checkBoardColumns = this.boardDrawed.columns
@@ -212,12 +201,15 @@ const doctorYai = {
         this.blockedPieces.forEach((pc, index) => {
             if (target.posY === pc.posY && target.posX === pc.posX + 1 || target.posY === pc.posY && target.posX === pc.posX - 1 || target.posY === pc.posY - 1 && target.posX === pc.posX) {
                 if (target.color === pc.color) {
-                    //Ultima pieza añadida fuera.
-                    this.blockedPieces.pop()
-                    //Pieza valorada fuera.
-                    this.blockedPieces.splice(index, 1)
-                    //si vacío el tablero, se suman 350 puntos, si solo emparejo, 100.
-                    this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
+                    //Solo se eliminan dos a dos estos colores.
+                    if (pc.color === 'pink' || pc.color === '#44C3FD' || pc.color === '#F9C46B') {
+                        //Ultima pieza añadida fuera.
+                        this.blockedPieces.pop()
+                        //Pieza valorada fuera.
+                        this.blockedPieces.splice(index, 1)
+                        //si vacío el tablero, se suman 350 puntos, si solo emparejo, 100.
+                        this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
+                    }
                 }
             }
         })
