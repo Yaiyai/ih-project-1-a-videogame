@@ -1,9 +1,15 @@
 let scorePoints = document.getElementById("score-live")
+let levelText = document.querySelector('#level > span')
+
 let gameOver = document.getElementById("game-over")
 let gameOverScore = document.getElementById("score-game-over")
 let reloadGame = document.getElementById("reload-game")
-let levelText = document.querySelector('#level > span')
-let levelGameOver = document.getElementById('level-game-over')
+let levelGameOver = document.querySelector('#level-game-over > span')
+
+let newLevel = document.getElementById('new-level')
+let levelScore = document.querySelector('#level > span')
+let nextLevel = document.getElementById('next-level')
+
 
 const doctorYai = {
     ctx: undefined,
@@ -12,8 +18,8 @@ const doctorYai = {
         w: undefined,
         h: undefined,
     },
-    speed: 500,
-    frameCounter: 100,
+    speed: 300,
+    frameCounter: 300,
     interval: undefined,
     key: {
         SPACE: 32,
@@ -30,8 +36,6 @@ const doctorYai = {
     init() {
         this.canvasDom = document.getElementById("my-tetris")
         this.ctx = this.canvasDom.getContext("2d")
-        levelText.style.color = '#00CC76'
-        levelText.innerHTML = this.level
         this.setDimensions()
         this.start()
     },
@@ -42,17 +46,17 @@ const doctorYai = {
         this.setEventlisteners()
 
         this.interval = setInterval(() => {
+            levelText.innerHTML = this.level
             this.frameCounter--
             this.clearScreen()
             this.drawAll()
             this.movePiece(this.piece, this.piece.direction)
             this.checkSibling()
             this.goingDown()
-            this.levelUp()
-            this.frameCounter === 0 && this.gameOver()
-            this.checkGameOver()
-            console.log(this.speed, this.level)
-            console.log(this.frameCounter)
+            // this.moreLevel()
+            // this.frameCounter === 0 && this.gameOver()
+            // this.checkGameOver()
+
         }, this.speed)
 
     },
@@ -82,30 +86,34 @@ const doctorYai = {
         this.blockedPieces.forEach((pc) => pc.draw())
     },
 
-
+    //Métodos de puntuación y nivel
     setScore(points) {
         this.score += points
         scorePoints.innerHTML = this.score
-
     },
 
-    moreLevel(speed){
-        this.clearScreen()
-        this.drawAll()
-        this.speed = this.speed - speed
-        this.level = this.level + 1
-        levelText.innerHTML = this.level
+    moreLevel() {
+        if (this.score == 100) {
+            this.levelUp(1)
+        }
     },
 
-    levelUp() {
-        this.score === 500 && this.moreLevel(50)
-        this.score === 1000 && this.moreLevel(50)
-        this.score === 2000 && this.moreLevel(50)
-        this.score === 3500 && this.moreLevel(50)
-        this.score === 5000 && this.moreLevel(50)
-        this.score === 8000 && this.moreLevel(50)
+    levelUp(level) {
+        newLevel.style.display = "flex"
+        levelScore.innerHTML = this.level + level
+
+        nextLevel.onclick = () => {
+            this.init()
+            newLevel.style.display = "none"
+            this.score = 0
+            this.level = this.level + level
+            this.blockedPieces = []
+            scorePoints.innerHTML = this.score
+            levelText.innerHTML = this.level + level
+        }
     },
 
+    //Metodos del game over
     reLoad() {
         document.location.reload()
     },
@@ -135,22 +143,8 @@ const doctorYai = {
         this.piece = new Pieces(this.ctx)
     },
 
-    borderCollision(piece) {
-        let checkArray = this.boardDrawed.board
-
-        for (let i = 0; i < checkArray.length; i++) {
-            for (let k = 0; k < checkArray[i].length; k++) {
-                //compruebo si choca con los limites inferior y laterales
-                if (piece.posY >= checkArray[i].length - 1 || piece.posX <= 0 || piece.posX >= checkArray.length - 1) {
-                    return true
-
-                }
-            }
-        }
-        return false
-    },
-
     piecesCollision(item1, item2) {
+        //La width o height de la pieza es la unidad de medida, 1 columna o 1 fila.
         return (
             item1.posX < item2.posX + 1 &&
             item1.posX + 1 > item2.posX &&
@@ -171,10 +165,10 @@ const doctorYai = {
                 //Reviso si choca con otras piezas, y si choca, se apila
                 if (this.blockedPieces.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
                     piece.posX = piece.posX
-                //Reviso si choca con los límites del array
+                    //Reviso si choca con los límites del array
                 } else if (piece.posX <= 0) {
                     piece.posX = 0
-                //movimiento hacia la izquierda
+                    //movimiento hacia la izquierda
                 } else {
                     piece.posX--
 
@@ -182,6 +176,7 @@ const doctorYai = {
                 break
             case "right":
                 piece.direction = "down"
+
                 if (this.blockedPieces.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY)) {
                     piece.posX = piece.posX
 
@@ -195,11 +190,12 @@ const doctorYai = {
                 break
             default:
                 piece.direction = "down"
+
                 if (this.blockedPieces.some((pc) => pc.posX === piece.posX && pc.posY === piece.posY + 1) || piece.posY >= checkBoardRows - 1) {
-                    //si se apila o llega al fondo del tablero, la pieza pasa a formar parte del array de blockedPieces
+                    //si se apila o llega al fondo del tablero, la pieza pasa a formar parte del array de blockedPieces.
                     piece.isBlocked = true
                     this.blockedPieces.push(piece)
-                    //una vez la pieza anterior está bloqueada, se lanza una nueva
+                    //una vez la pieza anterior está bloqueada, se lanza una nueva.
                     this.getPiece()
 
                 } else {
@@ -214,39 +210,25 @@ const doctorYai = {
         let target = this.blockedPieces[this.blockedPieces.length - 1]
         //Reviso las posiciones ocupadas alrededor de la última pieza bloqueada. Si coinciden en color, las elimino
         this.blockedPieces.forEach((pc, index) => {
-            if (target.posY === pc.posY && target.posX === pc.posX + 1) {
+            if (target.posY === pc.posY && target.posX === pc.posX + 1 || target.posY === pc.posY && target.posX === pc.posX - 1 || target.posY === pc.posY - 1 && target.posX === pc.posX) {
                 if (target.color === pc.color) {
-                    console.log("igual en misma Y, por la derecha")
+                    //Ultima pieza añadida fuera.
                     this.blockedPieces.pop()
+                    //Pieza valorada fuera.
                     this.blockedPieces.splice(index, 1)
-                    //si vacío el tablero, se suman 350 puntos, si solo emparejo, 100
+                    //si vacío el tablero, se suman 350 puntos, si solo emparejo, 100.
                     this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
-                }
-            } else if (target.posY === pc.posY && target.posX === pc.posX - 1) {
-                if (target.color === pc.color) {
-                    console.log("igual en misma Y, por la izquierda")
-                    this.blockedPieces.pop()
-                    this.blockedPieces.splice(index, 1)
-                    this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
-
-                }
-            } else if (target.posY === pc.posY - 1 && target.posX === pc.posX) {
-                if (target.color === pc.color) {
-                    console.log("igual en misma X")
-                    this.blockedPieces.pop()
-                    this.blockedPieces.splice(index, 1)
-                    this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
-
                 }
             }
         })
     },
 
     goingDown() {
-        let availablePieces = this.blockedPieces.filter(pc => pc.posY !== 13) 
-
-        availablePieces.forEach((pc,idx) => {
-            if(!this.blockedPieces.some(piece => piece.posY === pc.posY + 1 && piece.posX === pc.posX)){
+        //Busco primero aquellas piezas que están bloqueadas por el eje inferior. Esas no van a descender más.
+        let availablePieces = this.blockedPieces.filter(pc => pc.posY !== 13)
+        //Dentro de las piezas que si pueden descender, busco aquellas que tengan un espacio debajo.
+        availablePieces.forEach(pc => {
+            if (!this.blockedPieces.some(piece => piece.posY === pc.posY + 1 && piece.posX === pc.posX)) {
                 pc.posY++
             }
         })
