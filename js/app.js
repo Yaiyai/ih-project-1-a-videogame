@@ -3,6 +3,7 @@ let gameOver = document.getElementById("game-over")
 let gameOverScore = document.getElementById("score-game-over")
 let reloadGame = document.getElementById("reload-game")
 let levelText = document.querySelector('#level > span')
+let levelGameOver = document.getElementById('level-game-over')
 
 const doctorYai = {
     ctx: undefined,
@@ -11,7 +12,8 @@ const doctorYai = {
         w: undefined,
         h: undefined,
     },
-    speed: 700,
+    speed: 500,
+    frameCounter: 100,
     interval: undefined,
     key: {
         SPACE: 32,
@@ -28,6 +30,8 @@ const doctorYai = {
     init() {
         this.canvasDom = document.getElementById("my-tetris")
         this.ctx = this.canvasDom.getContext("2d")
+        levelText.style.color = '#00CC76'
+        levelText.innerHTML = this.level
         this.setDimensions()
         this.start()
     },
@@ -36,18 +40,21 @@ const doctorYai = {
         this.getBkg()
         this.getPiece()
         this.setEventlisteners()
-        levelText.style.color = '#00CC76'
-        levelText.innerHTML = this.level
+
         this.interval = setInterval(() => {
+            this.frameCounter--
             this.clearScreen()
             this.drawAll()
             this.movePiece(this.piece, this.piece.direction)
             this.checkSibling()
-            this.checkGameOver()
-            // console.log(this.boardDrawed.board[4][13])
+            this.goingDown()
             this.levelUp()
-            // this.timeLimit(300000)
+            this.frameCounter === 0 && this.gameOver()
+            this.checkGameOver()
+            console.log(this.speed, this.level)
+            console.log(this.frameCounter)
         }, this.speed)
+
     },
 
     setDimensions() {
@@ -75,10 +82,6 @@ const doctorYai = {
         this.blockedPieces.forEach((pc) => pc.draw())
     },
 
-    //Revisar time limit, porque salta nada más empezar
-    timeLimit(time) {
-        setTimeout(this.gameOver(), time)
-    },
 
     setScore(points) {
         this.score += points
@@ -86,30 +89,21 @@ const doctorYai = {
 
     },
 
-    //revisar los levelUPS
-    //como hacerlo genérico, que cada X puntos suba un nivel, aumente la velocidad
+    moreLevel(speed){
+        this.clearScreen()
+        this.drawAll()
+        this.speed = this.speed - speed
+        this.level = this.level + 1
+        levelText.innerHTML = this.level
+    },
+
     levelUp() {
-        if (this.score >= 500) {
-            this.clearScreen()
-            this.drawAll()
-            this.speed = this.speed - 100
-            levelText.innerHTML = 2
-
-        }
-        if (this.score >= 1000) {
-            this.clearScreen()
-            this.drawAll()
-            this.speed = this.speed - 100
-            levelText.innerHTML = 3
-
-        }
-        if (this.score >= 2000) {
-            this.clearScreen()
-            this.drawAll()
-            this.speed = this.speed - 100
-            levelText.innerHTML = 4
-
-        }
+        this.score === 500 && this.moreLevel(50)
+        this.score === 1000 && this.moreLevel(50)
+        this.score === 2000 && this.moreLevel(50)
+        this.score === 3500 && this.moreLevel(50)
+        this.score === 5000 && this.moreLevel(50)
+        this.score === 8000 && this.moreLevel(50)
     },
 
     reLoad() {
@@ -119,6 +113,7 @@ const doctorYai = {
     gameOver() {
         gameOver.style.display = "flex"
         gameOverScore.innerHTML = this.score
+        levelGameOver.innerHTML = this.level
         window.clearInterval(this.interval)
 
         reloadGame.onclick = () => {
@@ -163,63 +158,6 @@ const doctorYai = {
             item1.posY + 1 > item2.posY
 
         )
-    },
-
-    checkSibling() {
-        let target = this.blockedPieces[this.blockedPieces.length - 1]
-        //Reviso las posiciones ocupadas alrededor de la última pieza bloqueada. Si coinciden en color, las elimino
-        this.blockedPieces.forEach((pc, index) => {
-            if (target.posY === pc.posY && target.posX === pc.posX + 1) {
-                if (target.color === pc.color) {
-                    console.log("igual en misma Y, por la derecha")
-                    this.blockedPieces.pop()
-                    this.blockedPieces.splice(index, 1)
-                    //si vacío el tablero, se suman 350 puntos, si solo emparejo, 100
-                    this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
-
-                    // this.goingDown()
-                }
-            } else if (target.posY === pc.posY && target.posX === pc.posX - 1) {
-                if (target.color === pc.color) {
-                    console.log("igual en misma Y, por la izquierda")
-                    this.blockedPieces.pop()
-                    this.blockedPieces.splice(index, 1)
-                    this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
-
-                }
-            } else if (target.posY === pc.posY - 1 && target.posX === pc.posX) {
-                if (target.color === pc.color) {
-                    console.log("igual en misma X")
-                    this.blockedPieces.pop()
-                    this.blockedPieces.splice(index, 1)
-                    this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
-
-                }
-            }
-        })
-        return false
-    },
-
-    goingDown() {
-        this.blockedPieces.some((pc) => {
-            if (pc.posY + 1 === this.boardDrawed.board.empty) {
-                pc.posY++
-
-            }
-        })
-    },
-
-    changeBoard(piece) {
-        let checkArray = this.boardDrawed.board
-
-        if (piece.isBlocked) {
-            for (let i = 0; i < checkArray.length; i++) {
-                for (let k = 0; k < checkArray[i].length; k++) {
-                    checkArray[i][k] = piece.color
-
-                }
-            }
-        }
     },
 
     movePiece(piece, dir) {
@@ -270,5 +208,47 @@ const doctorYai = {
                 }
                 break
         }
+    },
+
+    checkSibling() {
+        let target = this.blockedPieces[this.blockedPieces.length - 1]
+        //Reviso las posiciones ocupadas alrededor de la última pieza bloqueada. Si coinciden en color, las elimino
+        this.blockedPieces.forEach((pc, index) => {
+            if (target.posY === pc.posY && target.posX === pc.posX + 1) {
+                if (target.color === pc.color) {
+                    console.log("igual en misma Y, por la derecha")
+                    this.blockedPieces.pop()
+                    this.blockedPieces.splice(index, 1)
+                    //si vacío el tablero, se suman 350 puntos, si solo emparejo, 100
+                    this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
+                }
+            } else if (target.posY === pc.posY && target.posX === pc.posX - 1) {
+                if (target.color === pc.color) {
+                    console.log("igual en misma Y, por la izquierda")
+                    this.blockedPieces.pop()
+                    this.blockedPieces.splice(index, 1)
+                    this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
+
+                }
+            } else if (target.posY === pc.posY - 1 && target.posX === pc.posX) {
+                if (target.color === pc.color) {
+                    console.log("igual en misma X")
+                    this.blockedPieces.pop()
+                    this.blockedPieces.splice(index, 1)
+                    this.blockedPieces.length === 0 ? this.setScore(350) : this.setScore(100)
+
+                }
+            }
+        })
+    },
+
+    goingDown() {
+        let availablePieces = this.blockedPieces.filter(pc => pc.posY !== 13) 
+
+        availablePieces.forEach((pc,idx) => {
+            if(!this.blockedPieces.some(piece => piece.posY === pc.posY + 1 && piece.posX === pc.posX)){
+                pc.posY++
+            }
+        })
     },
 }

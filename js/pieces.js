@@ -5,7 +5,7 @@ class Pieces {
         this.empty = 'white' // color de la unidad vacía
         this.color = this.setColor()
         this.initPiece = [
-            [1]
+            [1] 
         ]
         this.posX = 4
         this.posY = -1
@@ -14,7 +14,7 @@ class Pieces {
 
     }
     setColor() {
-        let colours = ['#00CC76', '#B4D2D7', '#0B799D', 'red', 'pink', 'blue']
+        let colours = ['#00CC76', '#B4D2D7', '#0B799D', '#F9C46B', 'pink', '#44C3FD']
         return colours[Math.floor(Math.random() * colours.length)]
     }
     drawUnit(x, y) {
