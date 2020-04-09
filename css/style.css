@@ -80,9 +80,20 @@ hr {
     color: #0B799D;
 }
 
+#my-canvas small {
+    color: #0B799D;
+}
+
 #my-canvas #on-game p#level {
     text-align: center;
 }
+
+#my-canvas #helpful {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 
 #my-canvas #music-button {
     display: flex;
@@ -90,9 +101,9 @@ hr {
     align-items: center;
 }
 
-#my-canvas #music-button img {
-    width: 47px;
-    margin: 10px 3px
+#my-canvas #helpful img {
+    width: 20px;
+    margin: 10px 3px;
 }
 
 
@@ -178,7 +189,7 @@ button#ok {
     height: 100vh;
     width: 100vw;
     background-color: rgba(7, 72, 94, 0.5);
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
 }

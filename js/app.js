@@ -13,6 +13,11 @@ let newLevel = document.getElementById('new-level')
 let levelScore = document.querySelector('#level-new > span')
 let nextLevel = document.getElementById('next-level')
 
+let helpMe = document.getElementById('help-me')
+let howTo = document.getElementById('rules')
+let gotIt = document.getElementById('ok')
+let rulesPop = document.getElementById('instructions')
+
 //Music
 let audioMusic = new Audio('music/drYaiMusic.mp3')
 let pointsMusic = new Audio('music/points.wav')
@@ -104,6 +109,9 @@ const doctorYai = {
             e.keyCode === this.key.RIGHT ? (this.piece.direction = "right") : null
             e.keyCode === this.key.LEFT ? (this.piece.direction = "left") : null
             e.keyCode === this.key.DOWN ? this.movePiece(this.piece, "down") : null
+        }
+        helpMe.onclick = () => {
+            rulesPop.style.display = 'flex'
         }
     },
 
