@@ -1,20 +1,17 @@
 class Bad {
-    constructor(ctx) {
+    constructor(ctx, color) {
         this.ctx = ctx
         this.unit = 50 // unidad a partir de la cual se renderiza la cuadrícula. Un cuadrado de lado 50.
-        this.color = this.setColor()
+        this.color = color
         this.posX = Math.floor(Math.random() * 10)
         this.posY = this.setY()
         this.isBlocked = false
 
-    }
-    setColor() {
-        let colours = ['red', 'black', 'white']
-        return colours[Math.floor(Math.random() * colours.length)]
+
     }
     setY() {
         if (this.posY !== 0) {
-            return Math.floor(Math.random() * 13)
+            return Math.floor(Math.random() * 12)
         } else {
             return 1
         }

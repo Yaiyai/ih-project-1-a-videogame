@@ -69,7 +69,6 @@ const doctorYai = {
         this.interval = setInterval(() => {
             this.setTimer()
             this.frameCounter++
-            this.frameCounter === 1000 ? this.frameCounter = 0 : null
             this.timeLimit--
             this.timeLimit === 0 && this.gameOver()
             this.clearScreen()
@@ -77,10 +76,13 @@ const doctorYai = {
             this.movePiece(this.piece, this.piece.direction)
             this.checkSibling()
             this.goingDown()
-            // this.frameCounter % 5 === 0 ? this.getBad() : null
-            // console.log(this.frameCounter)
             this.moreLevel()
+            // this.complications()
+            this.frameCounter % 10 === 0 && this.getBad('white')
+
             this.checkGameOver()
+
+            console.log(this.frameCounter)
 
         }, 1000 / this.fps)
 
@@ -184,21 +186,28 @@ const doctorYai = {
     getPiece() {
         this.piece = new Pieces(this.ctx)
     },
-    getBad() {
-        this.badPieces.push(new Bad(this.ctx))
+
+    getBad(color) {
+        this.badPieces.push(new Bad(this.ctx, color))
     },
 
     movePiece(piece, dir) {
         let checkBoardRows = this.boardDrawed.rows
         let checkBoardColumns = this.boardDrawed.columns
+        let badRed = this.badPieces.filter(pc => pc.color === 'red')
+        let badBlack = this.badPieces.filter(pc => pc.color === 'black')
+        let badWhite = this.badPieces.filter(pc => pc.color === 'white')
 
         switch (dir) {
             case "left":
                 //recupero su dirección down, porque deja de funcionar las normas de down
                 piece.direction = "down"
                 //Reviso si choca con otras piezas, y si choca, se apila
-                if (this.blockedPieces.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
+                if (this.blockedPieces.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY) || badWhite.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY) || badRed.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
                     piece.posX = piece.posX
+
+                } else if (badBlack.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
+                    this.gameOver()
                     //Reviso si choca con los límites del array
                 } else if (piece.posX <= 0) {
                     piece.posX = 0
@@ -211,25 +220,42 @@ const doctorYai = {
             case "right":
                 piece.direction = "down"
 
-                if (this.blockedPieces.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY)) {
+                if (this.blockedPieces.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY) || badWhite.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY || badRed.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY))) {
                     piece.posX = piece.posX
+
+                } else if (badBlack.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY)) {
+                    this.gameOver()
 
                 } else if (piece.posX >= checkBoardColumns - 1) {
                     piece.posX = 9
 
                 } else {
                     piece.posX++
-
                 }
                 break
             default:
                 piece.direction = "down"
 
-                if (this.blockedPieces.some((pc) => pc.posX === piece.posX && pc.posY === piece.posY + 1) || piece.posY >= checkBoardRows - 1) {
-                    //si se apila o llega al fondo del tablero, la pieza pasa a formar parte del array de blockedPieces.
+                if (badWhite.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
+                    piece.isBlocked = true
+                    piece.posY = piece.posY--
+                    this.getPiece()
+
+                } else if (this.blockedPieces.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
                     piece.isBlocked = true
                     this.blockedPieces.push(piece)
-                    //una vez la pieza anterior está bloqueada, se lanza una nueva.
+                    this.getPiece()
+
+                } else if (badBlack.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
+                    this.gameOver()
+
+                } else if (badRed.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
+                    this.blockedPieces = []
+                    this.getPiece()
+
+                } else if (piece.posY >= checkBoardRows - 1) {
+                    piece.isBlocked = true
+                    this.blockedPieces.push(piece)
                     this.getPiece()
 
                 } else {
@@ -237,6 +263,7 @@ const doctorYai = {
 
                 }
                 break
+
         }
     },
 
@@ -252,7 +279,6 @@ const doctorYai = {
 
             for (elm in twoCollide) {
                 if (twoCollide[elm] && target.color === pc.color && (pc.color === 'pink' || pc.color === '#44C3FD' || pc.color === '#F9C46B')) {
-
                     this.blockedPieces.splice(index, 1)
                     this.blockedPieces.pop()
                     this.blockedPieces.length === 0 ? this.setScore(150) : this.setScore(50)
@@ -278,7 +304,6 @@ const doctorYai = {
                         this.blockedPieces.splice(index2, 1)
                         this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
                     }
-
                 }
 
             }) //Segundo for each
@@ -320,6 +345,26 @@ const doctorYai = {
     setTimer() {
         timerSeconds.innerHTML = this.twoDigitsNumber(this.getSeconds())
         timerMinutes.innerHTML = this.twoDigitsNumber(this.getMinutes())
+    },
+
+    complications() {
+        if (this.level === 2) {
+            this.frameCounter = 0
+            this.frameCounter % 30 && this.getBad('red')
+        }
+        if (this.level === 3) {
+            this.frameCounter = 0
+            this.frameCounter % 20 && this.getBad('red')
+            this.frameCounter % 50 && this.getBad('white')
+        }
+        if (this.level === 4) {
+            this.frameCounter = 0
+            this.frameCounter % 10 && this.getBad('red')
+            this.frameCounter % 20 && this.getBad('white')
+            this.frameCounter % 20 && this.getBad('black')
+        }
+
+
     }
 
 
