@@ -55,7 +55,7 @@ const doctorYai = {
         this.canvasDom = document.getElementById("my-tetris")
         this.ctx = this.canvasDom.getContext("2d")
         levelText.innerHTML = this.level
-        levelText.style.color = 'red'
+        levelText.style.color = '#00CC76'
         this.setDimensions()
         this.start()
     },

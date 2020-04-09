@@ -59,6 +59,11 @@ hr {
     display: none;
 }
 
+#my-canvas figure {
+    margin: 10px auto 20px;
+    width: 70px;
+}
+
 #my-canvas #on-game {
     display: flex;
     justify-content: space-between;
