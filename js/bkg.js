@@ -20,6 +20,8 @@ class BoardBackground {
         this.ctx.fillRect(x * this.unit, y * this.unit, this.unit, this.unit)
 
         this.ctx.strokeStyle = '#B4D2D7' // light blue
+        this.ctx.lineWidth = 1
+
         this.ctx.strokeRect(x * this.unit, y * this.unit, this.unit, this.unit)
     }
     draw() {

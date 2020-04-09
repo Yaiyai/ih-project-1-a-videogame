@@ -65,6 +65,8 @@ const doctorYai = {
         this.getBkg()
         this.getPiece()
         this.setEventlisteners()
+        audioMusic.play()
+        audioMusic.volume = 0.2
 
         this.interval = setInterval(() => {
             this.setTimer()
@@ -77,12 +79,9 @@ const doctorYai = {
             this.checkSibling()
             this.goingDown()
             this.moreLevel()
-            // this.complications()
-            // this.frameCounter % 10 === 0 && this.getBad('white')
-
+            this.complications()
+            console.log(this.blockedPieces)
             this.checkGameOver()
-
-            console.log(this.frameCounter)
 
         }, 1000 / this.fps)
 
@@ -140,7 +139,9 @@ const doctorYai = {
     },
 
     levelUp(level, fps, timer) {
+        audioMusic.pause()
         levelMusic.play()
+        levelMusic.volume = 0.5
 
         clearInterval(this.interval)
         newLevel.style.display = "flex"
@@ -162,6 +163,7 @@ const doctorYai = {
     //Metodos del game over
     gameOver() {
         gameOverMusic.play()
+        gameOverMusic.volume = 0.5
         audioMusic.pause()
         clearInterval(this.interval)
         gameOver.style.display = "flex"
@@ -194,34 +196,49 @@ const doctorYai = {
     movePiece(piece, dir) {
         let checkBoardRows = this.boardDrawed.rows
         let checkBoardColumns = this.boardDrawed.columns
-        let badRed = this.badPieces.filter(pc => pc.color === 'red')
-        let badBlack = this.badPieces.filter(pc => pc.color === 'black')
-        let badWhite = this.badPieces.filter(pc => pc.color === 'white')
+        let badRed = this.badPieces.filter(pc => pc.name === 'red')
+        let badBlack = this.badPieces.filter(pc => pc.name === 'black')
+        let badPlum = this.badPieces.filter(pc => pc.name === 'plum')
 
         switch (dir) {
             case "left":
                 //recupero su dirección down, porque deja de funcionar las normas de down
                 piece.direction = "down"
                 //Reviso si choca con otras piezas, y si choca, se apila
-                if (this.blockedPieces.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY) || badWhite.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY) || badRed.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
+                if (this.blockedPieces.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
                     piece.posX = piece.posX
+
+                } else if (badPlum.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
+                    piece.posX = piece.posX
+
+                } else if (badRed.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
+                    piece.posX = piece.posX
+                    this.blockedPieces = []
 
                 } else if (badBlack.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
                     this.gameOver()
-                    //Reviso si choca con los límites del array
+
                 } else if (piece.posX <= 0) {
                     piece.posX = 0
-                    //movimiento hacia la izquierda
+
                 } else {
                     piece.posX--
 
                 }
                 break
+
             case "right":
                 piece.direction = "down"
 
-                if (this.blockedPieces.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY) || badWhite.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY || badRed.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY))) {
+                if (this.blockedPieces.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY)) {
                     piece.posX = piece.posX
+
+                } else if (badPlum.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY)) {
+                    piece.posX = piece.posX
+
+                } else if (badRed.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY)) {
+                    piece.posX = piece.posX
+                    this.blockedPieces = []
 
                 } else if (badBlack.some((pc) => pc.posX === piece.posX + 1 && pc.posY === piece.posY)) {
                     this.gameOver()
@@ -233,37 +250,30 @@ const doctorYai = {
                     piece.posX++
                 }
                 break
+
             default:
                 piece.direction = "down"
 
-                if (badWhite.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
-                    piece.isBlocked = true
-                    piece.posY = piece.posY--
-                    this.getPiece()
-
-                } else if (this.blockedPieces.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
+                if (this.blockedPieces.some((pc) => pc.posX === piece.posX && pc.posY === piece.posY + 1) || piece.posY >= checkBoardRows - 1) {
                     piece.isBlocked = true
                     this.blockedPieces.push(piece)
                     this.getPiece()
 
-                } else if (badBlack.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
-                    this.gameOver()
+                } else if (badPlum.some((pc) => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
+                    this.blockedPieces.push(piece)
+                    this.getPiece()
 
-                } else if (badRed.some(pc => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
+                } else if (badRed.some((pc) => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
                     this.blockedPieces = []
                     this.getPiece()
 
-                } else if (piece.posY >= checkBoardRows - 1) {
-                    piece.isBlocked = true
-                    this.blockedPieces.push(piece)
-                    this.getPiece()
+                } else if (badBlack.some((pc) => pc.posX === piece.posX && pc.posY === piece.posY + 1)) {
+                    this.gameOver()
 
                 } else {
                     piece.posY++
-
                 }
                 break
-
         }
     },
 
@@ -329,6 +339,9 @@ const doctorYai = {
     getSeconds() {
         return Math.floor((this.timeLimit / this.fps) - this.getMinutes() * 60)
     },
+    // getMinutes = () => Math.floor((this.timeLimit / this.fps) / 60),
+    // getSeconds = () => Math.floor((this.timeLimit / this.fps) - this.getMinutes() * 60)
+
     twoDigitsNumber(num) {
         const twoDigits = num.toString()
 
@@ -355,18 +368,13 @@ const doctorYai = {
         if (this.level === 3) {
             this.frameCounter = 0
             this.frameCounter % 20 && this.getBad('red')
-            this.frameCounter % 50 && this.getBad('white')
+            this.frameCounter % 50 && this.getBad('plum')
         }
         if (this.level === 4) {
             this.frameCounter = 0
             this.frameCounter % 10 && this.getBad('red')
-            this.frameCounter % 20 && this.getBad('white')
+            this.frameCounter % 20 && this.getBad('plum')
             this.frameCounter % 20 && this.getBad('black')
         }
-
-
-    }
-
-
-
+    },
 }
