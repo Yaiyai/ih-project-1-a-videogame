@@ -80,8 +80,9 @@ const doctorYai = {
             this.goingDown()
             this.moreLevel()
             this.complications()
-            console.log(this.blockedPieces)
             this.checkGameOver()
+
+            console.log(this.frameCounter)
 
         }, 1000 / this.fps)
 
@@ -149,12 +150,13 @@ const doctorYai = {
 
         nextLevel.onclick = () => {
             this.start()
-
+            this.frameCounter = 0
             this.level = level
             levelText.innerHTML = this.level
             newLevel.style.display = "none"
 
             this.blockedPieces = []
+            this.badPieces = []
             this.timeLimit = timer
             this.fps = fps
         }
@@ -362,19 +364,16 @@ const doctorYai = {
 
     complications() {
         if (this.level === 2) {
-            this.frameCounter = 0
-            this.frameCounter % 30 && this.getBad('red')
+            this.frameCounter % 50 === 0 && this.getBad('red')
         }
         if (this.level === 3) {
-            this.frameCounter = 0
-            this.frameCounter % 20 && this.getBad('red')
-            this.frameCounter % 50 && this.getBad('plum')
+            this.frameCounter % 20 === 0 && this.getBad('red')
+            this.frameCounter % 50 === 0 && this.getBad('plum')
         }
         if (this.level === 4) {
-            this.frameCounter = 0
-            this.frameCounter % 10 && this.getBad('red')
-            this.frameCounter % 20 && this.getBad('plum')
-            this.frameCounter % 20 && this.getBad('black')
+            this.frameCounter % 10 === 0 && this.getBad('red')
+            this.frameCounter % 20 === 0 && this.getBad('plum')
+            this.frameCounter % 30 === 0 && this.getBad('black')
         }
     },
 }
