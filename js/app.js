@@ -13,6 +13,9 @@ let newLevel = document.getElementById('new-level')
 let levelScore = document.querySelector('#level-new > span')
 let nextLevel = document.getElementById('next-level')
 
+let winPop = document.getElementById('win')
+let winWin = document.getElementById('win-again')
+
 let helpMe = document.getElementById('help-me')
 let howTo = document.getElementById('rules')
 let gotIt = document.getElementById('ok')
@@ -23,6 +26,7 @@ let audioMusic = new Audio('music/drYaiMusic.mp3')
 let pointsMusic = new Audio('music/points.wav')
 let levelMusic = new Audio('music/level.mp3')
 let gameOverMusic = new Audio('music/game-over.wav')
+let winMusic = new Audio('music/win.wav')
 let playMusic = document.getElementById('play-music')
 let pauseMusic = document.getElementById('pause-music')
 
@@ -149,6 +153,15 @@ const doctorYai = {
         if (this.level === 5 && this.score >= 4000) {
             this.levelUp(6, 8, 250)
         }
+        if (this.level === 6 && this.score >= 5500) {
+            this.levelUp(7, 8, 200)
+        }
+        if (this.level === 7 && this.score >= 7000) {
+            this.levelUp(8, 8, 200)
+        }
+        if (this.level === 8 && this.score >= 9000) {
+            this.youWin()
+        }
     },
 
     levelUp(level, fps, timer) {
@@ -172,6 +185,18 @@ const doctorYai = {
             this.timeLimit = timer
             this.fps = fps
         }
+    },
+
+    youWin() {
+        clearInterval(this.interval)
+        this.pauseMusic()
+        winMusic.play()
+        winPop.style.display = 'flex'
+
+        winWin.onclick = () => {
+            document.location.reload()
+        }
+
     },
 
     //Metodos del game over
@@ -379,13 +404,33 @@ const doctorYai = {
             this.frameCounter % 50 === 0 && this.getBad('red')
         }
         if (this.level === 3) {
-            this.frameCounter % 20 === 0 && this.getBad('red')
+            this.frameCounter % 30 === 0 && this.getBad('red')
             this.frameCounter % 50 === 0 && this.getBad('plum')
         }
         if (this.level === 4) {
-            this.frameCounter % 10 === 0 && this.getBad('red')
-            this.frameCounter % 20 === 0 && this.getBad('plum')
+            this.frameCounter % 30 === 0 && this.getBad('red')
+            this.frameCounter % 35 === 0 && this.getBad('plum')
+            this.frameCounter % 40 === 0 && this.getBad('black')
+        }
+        if (this.level === 5) {
+            this.frameCounter % 25 === 0 && this.getBad('red')
+            this.frameCounter % 30 === 0 && this.getBad('plum')
+            this.frameCounter % 35 === 0 && this.getBad('black')
+        }
+        if (this.level === 6) {
+            this.frameCounter % 20 === 0 && this.getBad('red')
+            this.frameCounter % 25 === 0 && this.getBad('plum')
             this.frameCounter % 30 === 0 && this.getBad('black')
+        }
+        if (this.level === 7) {
+            this.frameCounter % 15 === 0 && this.getBad('red')
+            this.frameCounter % 20 === 0 && this.getBad('plum')
+            this.frameCounter % 25 === 0 && this.getBad('black')
+        }
+        if (this.level === 8) {
+            this.frameCounter % 10 === 0 && this.getBad('red')
+            this.frameCounter % 15 === 0 && this.getBad('plum')
+            this.frameCounter % 20 === 0 && this.getBad('black')
         }
     },
 }

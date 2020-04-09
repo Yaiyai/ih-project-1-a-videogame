@@ -48,6 +48,12 @@ hr {
     margin: 40px 0;
 }
 
+#init-game h4 {
+    color: #00CC76;
+    font-size: 1.8em;
+    margin: 10px 0;
+}
+
 #init-game p {
     color: #0B799D;
     font-size: 1.3em;
@@ -119,6 +125,17 @@ hr {
     align-items: center;
 }
 
+#win {
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(7, 72, 94, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
 #game-over {
     position: absolute;
     top: 0;
@@ -131,6 +148,7 @@ hr {
 }
 
 #new-level #pop-up,
+#win #pop-up,
 #game-over #pop-up {
     background-color: white;
     display: flex;
@@ -152,6 +170,7 @@ hr {
 }
 
 #new-level #pop-up h3,
+#win #pop-up h3,
 #instructions #pop-up h3,
 #game-over #pop-up h3 {
     color: #00CC76;
@@ -161,6 +180,7 @@ hr {
 }
 
 #new-level #pop-up p,
+#win #pop-up p,
 #instructions #pop-up p,
 #game-over #pop-up p {
     color: #0B799D;
@@ -261,7 +281,8 @@ button {
     padding: 20px 30px;
 }
 
-button#start-game {
+button#start-game,
+button#win-again {
     margin: 50px 0;
     background-color: #00CC76;
     color: #fff;
