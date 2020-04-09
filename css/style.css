@@ -48,7 +48,7 @@ hr {
     margin: 40px 0;
 }
 
-#init-game #instructions {
+#init-game p {
     color: #0B799D;
     font-size: 1.3em;
     width: 650px;
@@ -82,6 +82,17 @@ hr {
 
 #my-canvas #on-game p#level {
     text-align: center;
+}
+
+#my-canvas #music-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#my-canvas #music-button img {
+    width: 47px;
+    margin: 10px 3px
 }
 
 
@@ -119,7 +130,18 @@ hr {
     border: #00CC76 solid 4px;
 }
 
+#instructions #pop-up {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    border-radius: 20px;
+    border: #00CC76 solid 4px;
+}
+
 #new-level #pop-up h3,
+#instructions #pop-up h3,
 #game-over #pop-up h3 {
     color: #00CC76;
     font-size: 2.5em;
@@ -128,10 +150,11 @@ hr {
 }
 
 #new-level #pop-up p,
+#instructions #pop-up p,
 #game-over #pop-up p {
     color: #0B799D;
     font-size: 1.3em;
-    text-transform: capitalize;
+    margin: 5px 0;
 }
 
 button#reload-game,
@@ -140,6 +163,83 @@ button#next-level {
     color: #fff;
     margin-top: 40px;
 }
+
+button#ok {
+    background-color: #0B799D;
+    color: #fff;
+    margin-top: 20px;
+}
+
+/* instructions */
+
+#instructions {
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(7, 72, 94, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#instructions #pop-up h3 {
+    color: #00CC76;
+    font-size: 2em;
+    text-transform: capitalize;
+    margin: 0 0 10px;
+}
+
+
+#instructions #pop-up h4 {
+    color: #00CC76;
+    font-size: 1.8em;
+    margin: 10px 0;
+}
+
+#instructions #pop-up p {
+    color: #0B799D;
+    font-size: 1em;
+    margin: 3px 0;
+}
+
+#instructions #pop-up p>span {
+    color: #00CC76;
+    font-size: 1em;
+    margin: 3px 0;
+}
+
+#instructions #scoring {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#instructions #by-two,
+#instructions #by-three,
+#instructions #bad {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#instructions #by-two figure,
+#instructions #by-three figure,
+#instructions #bad figure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+#instructions #by-two figure img,
+#instructions #by-three figure img,
+#instructions #bad figure img {
+    width: 47px;
+    margin: 5px;
+}
+
 
 /* buttons */
 button {
@@ -155,4 +255,11 @@ button#start-game {
     background-color: #00CC76;
     color: #fff;
     border: #0B799D solid 3px;
+}
+
+button#rules {
+    margin: 0 0 30px;
+    background-color: #0B799D;
+    color: #fff;
+    font-size: 1.3em;
 }

@@ -18,6 +18,8 @@ let audioMusic = new Audio('music/drYaiMusic.mp3')
 let pointsMusic = new Audio('music/points.wav')
 let levelMusic = new Audio('music/level.mp3')
 let gameOverMusic = new Audio('music/game-over.wav')
+let playMusic = document.getElementById('play-music')
+let pauseMusic = document.getElementById('pause-music')
 
 
 const doctorYai = {
@@ -45,14 +47,12 @@ const doctorYai = {
     level: 1,
 
     init() {
-        //hace que la musica de fondo suene sin parar
         audioMusic.addEventListener('ended', function () {
             this.currentTime = 0;
             this.play();
         }, false);
-        audioMusic.play()
-        audioMusic.volume = 0.2
-
+        playMusic.addEventListener('click', this.playMusic)
+        pauseMusic.addEventListener('click', this.pauseMusic)
         this.canvasDom = document.getElementById("my-tetris")
         this.ctx = this.canvasDom.getContext("2d")
         levelText.innerHTML = this.level
@@ -61,12 +61,19 @@ const doctorYai = {
         this.start()
     },
 
+    playMusic() {
+        audioMusic.play()
+        audioMusic.volume = 0.2
+    },
+    pauseMusic() {
+        audioMusic.pause()
+    },
+
     start() {
         this.getBkg()
         this.getPiece()
         this.setEventlisteners()
-        audioMusic.play()
-        audioMusic.volume = 0.2
+        this.playMusic()
 
         this.interval = setInterval(() => {
             this.setTimer()
@@ -81,9 +88,6 @@ const doctorYai = {
             this.moreLevel()
             this.complications()
             this.checkGameOver()
-
-            console.log(this.frameCounter)
-
         }, 1000 / this.fps)
 
     },
@@ -140,7 +144,7 @@ const doctorYai = {
     },
 
     levelUp(level, fps, timer) {
-        audioMusic.pause()
+        this.pauseMusic()
         levelMusic.play()
         levelMusic.volume = 0.5
 
@@ -166,7 +170,7 @@ const doctorYai = {
     gameOver() {
         gameOverMusic.play()
         gameOverMusic.volume = 0.5
-        audioMusic.pause()
+        this.pauseMusic()
         clearInterval(this.interval)
         gameOver.style.display = "flex"
         gameOverScore.innerHTML = this.score
