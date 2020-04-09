@@ -78,7 +78,7 @@ const doctorYai = {
             this.goingDown()
             this.moreLevel()
             // this.complications()
-            this.frameCounter % 10 === 0 && this.getBad('white')
+            // this.frameCounter % 10 === 0 && this.getBad('white')
 
             this.checkGameOver()
 
