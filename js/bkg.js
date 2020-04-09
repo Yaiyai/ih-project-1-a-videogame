@@ -15,6 +15,7 @@ class BoardBackground {
         }
     }
     drawUnit(x, y) {
+        //Posicion x e y dentro del tablero
         this.ctx.fillStyle = this.empty
         this.ctx.fillRect(x * this.unit, y * this.unit, this.unit, this.unit)
 
@@ -24,7 +25,7 @@ class BoardBackground {
     draw() {
         for (let i = 0; i < this.columns; i++) {
             for (let k = 0; k < this.rows; k++) {
-                this.drawUnit(i, k, this.board[i][k])
+                this.drawUnit(i, k)
             }
         }
 

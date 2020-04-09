@@ -13,6 +13,12 @@ let newLevel = document.getElementById('new-level')
 let levelScore = document.querySelector('#level-new > span')
 let nextLevel = document.getElementById('next-level')
 
+//Music
+let audioMusic = new Audio('music/drYaiMusic.mp3')
+let pointsMusic = new Audio('music/points.wav')
+let levelMusic = new Audio('music/level.mp3')
+let gameOverMusic = new Audio('music/game-over.wav')
+
 
 const doctorYai = {
     ctx: undefined,
@@ -38,6 +44,14 @@ const doctorYai = {
     level: 1,
 
     init() {
+        //hace que la musica de fondo suene sin parar
+        audioMusic.addEventListener('ended', function () {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+        audioMusic.play()
+        audioMusic.volume = 0.2
+
         this.canvasDom = document.getElementById("my-tetris")
         this.ctx = this.canvasDom.getContext("2d")
         levelText.innerHTML = this.level
@@ -64,7 +78,7 @@ const doctorYai = {
             this.goingDown()
             this.moreLevel()
             this.checkGameOver()
-            console.log(this.fps, this.timeLimit)
+
         }, 1000 / this.fps)
 
     },
@@ -96,6 +110,7 @@ const doctorYai = {
 
     //Métodos de puntuación y nivel
     setScore(points) {
+        pointsMusic.play()
         this.score += points
         scorePoints.innerHTML = this.score
     },
@@ -119,6 +134,8 @@ const doctorYai = {
     },
 
     levelUp(level, fps, timer) {
+        levelMusic.play()
+
         clearInterval(this.interval)
         newLevel.style.display = "flex"
         levelScore.innerHTML = level
@@ -138,6 +155,8 @@ const doctorYai = {
 
     //Metodos del game over
     gameOver() {
+        gameOverMusic.play()
+        audioMusic.pause()
         clearInterval(this.interval)
         gameOver.style.display = "flex"
         gameOverScore.innerHTML = this.score
