@@ -87,7 +87,7 @@ const doctorYai = {
             this.setTimer()
             this.frameCounter++
             this.timeLimit--
-            this.timeLimit === 0 && this.gameOver()
+            // this.timeLimit === 0 && this.gameOver()
 
             this.clearScreen()
             this.drawAll()
@@ -96,8 +96,8 @@ const doctorYai = {
             this.checkSibling()
             this.goingDown()
 
-            this.levelUp()
-            this.badGuys()
+            // this.levelUp()
+            // this.badGuys()
 
             this.checkGameOver()
         }, 1000 / this.fps)
@@ -341,55 +341,53 @@ const doctorYai = {
                 if (twoCollide[elm] && target.color === pc.color && (pc.color === 'pink' || pc.color === '#44C3FD' || pc.color === '#F9C46B')) {
                     this.blockedPieces.splice(index, 1)
                     this.blockedPieces.pop()
-                    this.blockedPieces.length === 0 ? this.setScore(150) : this.setScore(50)
+                    this.setScore(50)
+                    this.blockedPieces.length === 0 && this.setScore(150)
                 }
             }
 
             //3 pieces in the same color
             this.blockedPieces.forEach((pc2, index2) => {
-                if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX + 1 && target.posX === pc2.posX + 2) {
-                    if (target.color === pc.color && target.color === pc2.color) {
-                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                if (target.color === '#00CC76' || target.color === '#B4D2D7' || target.color === '#0B799D') {
+                    if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX + 1 && target.posX === pc2.posX + 2) {
+                        if (target.color === pc.color && target.color === pc2.color) {
                             this.blockedPieces.pop()
                             this.blockedPieces.splice(index, 1)
                             this.blockedPieces.splice(index2, 1)
-                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(200)
+                            this.setScore(100)
+                            this.blockedPieces.length === 0 && this.setScore(200)
 
                         }
                     }
-                }
 
-                if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX - 2) {
-                    if (target.color === pc.color && target.color === pc2.color) {
-                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+
+                    if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX - 2) {
+                        if (target.color === pc.color && target.color === pc2.color) {
                             this.blockedPieces.pop()
                             this.blockedPieces.splice(index, 1)
                             this.blockedPieces.splice(index2, 1)
-                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
-
+                            this.setScore(100)
+                            this.blockedPieces.length === 0 && this.setScore(200)
                         }
                     }
-                }
 
-                if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX + 1) {
-                    if (target.color === pc.color && target.color === pc2.color) {
-                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                    if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX + 1) {
+                        if (target.color === pc.color && target.color === pc2.color) {
                             this.blockedPieces.pop()
                             this.blockedPieces.splice(index, 1)
                             this.blockedPieces.splice(index2, 1)
-                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
-
+                            this.setScore(100)
+                            this.blockedPieces.length === 0 && this.setScore(200)
                         }
                     }
-                }
 
-                if (target.posX === pc.posX && target.posX === pc2.posX && target.posY === pc.posY - 1 && target.posY === pc2.posY - 2) {
-                    if (target.color === pc.color && target.color === pc2.color) {
-                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                    if (target.posX === pc.posX && target.posX === pc2.posX && target.posY === pc.posY - 1 && target.posY === pc2.posY - 2) {
+                        if (target.color === pc.color && target.color === pc2.color) {
                             this.blockedPieces.pop()
                             this.blockedPieces.splice(index, 1)
                             this.blockedPieces.splice(index2, 1)
-                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
+                            this.setScore(100)
+                            this.blockedPieces.length === 0 && this.setScore(200)
 
                         }
                     }
