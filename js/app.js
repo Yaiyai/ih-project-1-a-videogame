@@ -87,7 +87,7 @@ const doctorYai = {
             this.setTimer()
             this.frameCounter++
             this.timeLimit--
-            // this.timeLimit === 0 && this.gameOver()
+            this.timeLimit === 0 && this.gameOver()
 
             this.clearScreen()
             this.drawAll()
@@ -96,8 +96,8 @@ const doctorYai = {
             this.checkSibling()
             this.goingDown()
 
-            // this.levelUp()
-            // this.badGuys()
+            this.levelUp()
+            this.badGuys()
 
             this.checkGameOver()
         }, 1000 / this.fps)
