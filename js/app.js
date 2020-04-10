@@ -112,9 +112,9 @@ const doctorYai = {
 
     setEventlisteners() {
         document.onkeydown = e => {
-            e.keyCode === this.key.RIGHT ? (this.piece.direction = "right") : null
-            e.keyCode === this.key.LEFT ? (this.piece.direction = "left") : null
-            e.keyCode === this.key.DOWN ? this.movePiece(this.piece, "down") : null
+            e.keyCode === this.key.RIGHT && (this.piece.direction = "right")
+            e.keyCode === this.key.LEFT && (this.piece.direction = "left")
+            e.keyCode === this.key.DOWN && this.movePiece(this.piece, "down")
         }
         helpMe.onclick = () => rulesPop.style.display = 'flex'
         playMusic.onclick = () => this.playMusic()
@@ -185,39 +185,30 @@ const doctorYai = {
     },
 
     badGuys() {
+        this.level === 2 && this.frameCounter % 50 === 0 && this.getBadPiece('red')
 
-        if (this.level === 2) {
-            this.frameCounter % 50 === 0 && this.getBadPiece('red')
-        }
-        if (this.level === 3) {
-            this.frameCounter % 30 === 0 && this.getBadPiece('red')
-            this.frameCounter % 50 === 0 && this.getBadPiece('plum')
-        }
-        if (this.level === 4) {
-            this.frameCounter % 30 === 0 && this.getBadPiece('red')
-            this.frameCounter % 35 === 0 && this.getBadPiece('plum')
-            this.frameCounter % 40 === 0 && this.getBadPiece('black')
-        }
-        if (this.level === 5) {
-            this.frameCounter % 25 === 0 && this.getBadPiece('red')
-            this.frameCounter % 30 === 0 && this.getBadPiece('plum')
-            this.frameCounter % 35 === 0 && this.getBadPiece('black')
-        }
-        if (this.level === 6) {
-            this.frameCounter % 20 === 0 && this.getBadPiece('red')
-            this.frameCounter % 25 === 0 && this.getBadPiece('plum')
-            this.frameCounter % 30 === 0 && this.getBadPiece('black')
-        }
-        if (this.level === 7) {
-            this.frameCounter % 15 === 0 && this.getBadPiece('red')
-            this.frameCounter % 20 === 0 && this.getBadPiece('plum')
-            this.frameCounter % 25 === 0 && this.getBadPiece('black')
-        }
-        if (this.level === 8) {
-            this.frameCounter % 10 === 0 && this.getBadPiece('red')
-            this.frameCounter % 15 === 0 && this.getBadPiece('plum')
-            this.frameCounter % 20 === 0 && this.getBadPiece('black')
-        }
+        this.level === 3 && this.frameCounter % 30 === 0 && this.getBadPiece('red')
+        this.level === 3 && this.frameCounter % 50 === 0 && this.getBadPiece('plum')
+
+        this.level === 4 && this.frameCounter % 30 === 0 && this.getBadPiece('red')
+        this.level === 4 && this.frameCounter % 35 === 0 && this.getBadPiece('plum')
+        this.level === 4 && this.frameCounter % 40 === 0 && this.getBadPiece('black')
+
+        this.level === 5 && this.frameCounter % 25 === 0 && this.getBadPiece('red')
+        this.level === 5 && this.frameCounter % 30 === 0 && this.getBadPiece('plum')
+        this.level === 5 && this.frameCounter % 35 === 0 && this.getBadPiece('black')
+
+        this.level === 6 && this.frameCounter % 20 === 0 && this.getBadPiece('red')
+        this.level === 6 && this.frameCounter % 25 === 0 && this.getBadPiece('plum')
+        this.level === 6 && this.frameCounter % 30 === 0 && this.getBadPiece('black')
+
+        this.level === 7 && this.frameCounter % 15 === 0 && this.getBadPiece('red')
+        this.level === 7 && this.frameCounter % 20 === 0 && this.getBadPiece('plum')
+        this.level === 7 && this.frameCounter % 25 === 0 && this.getBadPiece('black')
+
+        this.level === 8 && this.frameCounter % 10 === 0 && this.getBadPiece('red')
+        this.level === 8 && this.frameCounter % 15 === 0 && this.getBadPiece('plum')
+        this.level === 8 && this.frameCounter % 20 === 0 && this.getBadPiece('black')
     },
 
     youWin() {
