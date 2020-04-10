@@ -13,7 +13,6 @@ dark blue: #07485E */
     text-align: center;
 }
 
-
 img {
     display: block;
     width: 100%;
@@ -44,8 +43,8 @@ hr {
 }
 
 #init-game #logo {
-    width: 300px;
-    margin: 40px 0;
+    width: 250px;
+    margin: 40px 0 15px;
 }
 
 #init-game h4 {
@@ -56,18 +55,13 @@ hr {
 
 #init-game p {
     color: #0B799D;
-    font-size: 1.3em;
+    font-size: 1.15em;
     width: 650px;
     padding: 5px;
 }
 
 #my-canvas {
     display: none;
-}
-
-#my-canvas figure {
-    margin: 10px auto 20px;
-    width: 70px;
 }
 
 #my-canvas #on-game {
@@ -77,21 +71,17 @@ hr {
     padding: 10px 0;
 }
 
-#my-canvas #on-game #logo {
-    width: 100px;
-}
-
 #my-canvas #on-game p {
     text-align: right;
     color: #0B799D;
 }
 
-#my-canvas small {
-    color: #0B799D;
+#my-canvas #on-game p#level {
+    text-align: left;
 }
 
-#my-canvas #on-game p#level {
-    text-align: center;
+#my-canvas small {
+    color: #0B799D;
 }
 
 #my-canvas #helpful {
@@ -100,56 +90,31 @@ hr {
     align-items: center;
 }
 
-
-#my-canvas #music-button {
+#my-canvas #buttons {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-#my-canvas #helpful img {
+#my-canvas #buttons img {
     width: 20px;
     margin: 10px 3px;
 }
 
 
 /* new level */
-#new-level {
+.pop-up {
+    display: none;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     top: 0;
     height: 100vh;
     width: 100vw;
     background-color: rgba(7, 72, 94, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
 }
 
-#win {
-    position: absolute;
-    top: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(7, 72, 94, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-#game-over {
-    position: absolute;
-    top: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(7, 72, 94, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-#new-level #pop-up,
-#win #pop-up,
-#game-over #pop-up {
+.pop-up-dialogue {
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -159,82 +124,43 @@ hr {
     border: #00CC76 solid 4px;
 }
 
-#instructions #pop-up {
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+#instructions .pop-up-dialogue {
     padding: 30px;
-    border-radius: 20px;
-    border: #00CC76 solid 4px;
 }
 
-#new-level #pop-up h3,
-#win #pop-up h3,
-#instructions #pop-up h3,
-#game-over #pop-up h3 {
+.pop-up h3 {
     color: #00CC76;
     font-size: 2.5em;
     text-transform: capitalize;
     margin: 0 0 30px;
 }
 
-#new-level #pop-up p,
-#win #pop-up p,
-#instructions #pop-up p,
-#game-over #pop-up p {
+.pop-up p {
     color: #0B799D;
     font-size: 1.3em;
     margin: 5px 0;
 }
 
-button#reload-game,
-button#next-level {
-    background-color: #0B799D;
-    color: #fff;
-    margin-top: 40px;
-}
-
-button#ok {
-    background-color: #0B799D;
-    color: #fff;
-    margin-top: 20px;
-}
-
 /* instructions */
 
-#instructions {
-    position: absolute;
-    top: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(7, 72, 94, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-#instructions #pop-up h3 {
-    color: #00CC76;
+.pop-up h3#instructions {
     font-size: 2em;
-    text-transform: capitalize;
     margin: 0 0 10px;
 }
 
-
-#instructions #pop-up h4 {
+#instructions h4 {
     color: #00CC76;
     font-size: 1.8em;
     margin: 10px 0;
 }
 
-#instructions #pop-up p {
+#instructions p {
     color: #0B799D;
     font-size: 1em;
     margin: 3px 0;
 }
 
-#instructions #pop-up p>span {
+#instructions p>span {
     color: #00CC76;
     font-size: 1em;
     margin: 3px 0;
@@ -246,29 +172,23 @@ button#ok {
     align-items: center;
 }
 
-#instructions #by-two,
-#instructions #by-three,
-#instructions #bad {
+.order-scoring {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-#instructions #by-two figure,
-#instructions #by-three figure,
-#instructions #bad figure {
+.order-scoring figure {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 20px;
+    padding: 5px 20px;
 }
 
-#instructions #by-two figure img,
-#instructions #by-three figure img,
-#instructions #bad figure img {
-    width: 47px;
-    margin: 5px;
+.order-scoring figure img {
+    width: 25px;
+    margin: 3px;
 }
 
 
@@ -279,19 +199,29 @@ button {
     font-size: 2em;
     border-radius: 10px;
     padding: 20px 30px;
+    color: #fff;
+    background-color: #0B799D;
+
 }
 
-button#start-game,
-button#win-again {
-    margin: 50px 0;
+button#start-game {
+    margin: 30px 0;
     background-color: #00CC76;
-    color: #fff;
     border: #0B799D solid 3px;
 }
 
 button#rules {
     margin: 0 0 30px;
-    background-color: #0B799D;
-    color: #fff;
     font-size: 1.3em;
+}
+
+button#reload-game,
+button#next-level,
+button#win-again {
+    margin-top: 40px;
+}
+
+button#ok {
+    margin-top: 20px;
+    font-size: 1.5em;
 }

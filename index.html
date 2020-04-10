@@ -14,8 +14,46 @@
 
 <body>
   <section id="game">
-    <article id="game-over">
-      <article id="pop-up">
+    
+    <article id="init-game">
+      <figure id="logo">
+        <img src="img/logo.png" alt="Logo Dr.Yai Game" />
+      </figure>
+
+      <button id="start-game">start game</button>
+      <button id="rules">how to play</button>
+
+      <p>Just a game like Tetris, but easier.</p>
+      <p>Just a game like Dr. Mario, but simplier.</p>
+      <h4>Controls</h4>
+      <p>Left-key to go left, right-key to go
+        right and down-key to speed the piece down.</p>
+      </p>
+    </article>
+
+    <article id="my-canvas">
+      <div id="on-game">
+        <p id="level">level <span>1</span></p>
+        <p id="timer"><span id="mins">00</span>:<span id="secs">00</span></p>
+        <p id="score-live">Score: <span>0</span></p>
+      </div>
+
+      <canvas id="my-tetris"></canvas>
+
+      <div id="helpful">
+        <small>Made with &#9829; by Yai</small>
+        <div id="buttons">
+          <img src="img/icons/btn-pause.svg" id="pause-music" alt="pause-dr-yai">
+          <img src="img/icons/btn-play.svg" id="play-music" alt="play-dr-yai">
+          <img src="img/icons/btn-help.svg" id="help-me" alt="help-dr-yai">
+        </div>
+      </div>
+
+    </article>
+
+    <!-- Pop-ups -->
+    <article class="pop-up" id="game-over">
+      <article class="pop-up-dialogue">
         <h3>game over</h3>
         <p>Your score is:</p>
         <p id="score-game-over">2000</p>
@@ -25,8 +63,8 @@
       </article>
     </article>
 
-    <article id="new-level">
-      <article id="pop-up">
+    <article class="pop-up" id="new-level">
+      <article class="pop-up-dialogue">
         <h3>Congrats!</h3>
         <p>You've reached next level!</p>
         <hr />
@@ -35,8 +73,8 @@
       </article>
     </article>
 
-    <article id="win">
-      <article id="pop-up">
+    <article class="pop-up" id="win">
+      <article class="pop-up-dialogue">
         <h3>Win-win!</h3>
         <h3>You're the master!</h3>
         <hr />
@@ -45,15 +83,15 @@
       </article>
     </article>
 
-    <article id="instructions">
-      <article id="pop-up">
+    <article class="pop-up" id="instructions">
+      <article class="pop-up-dialogue">
 
         <h4>Good Guys</h4>
         <p>To score points you'll have to match units by color</p>
 
         <div id="scoring">
 
-          <div id="by-two">
+          <div class="order-scoring">
             <figure>
               <img src="img/icons/pink.svg" alt="">
               <img src="img/icons/light-blue.svg" alt="">
@@ -62,7 +100,7 @@
             <p><span>+50 points</span></p>
           </div>
 
-          <div id="by-three">
+          <div class="order-scoring">
             <figure>
               <img src="img/icons/dark-blue.svg" alt="">
               <img src="img/icons/green.svg" alt="">
@@ -73,14 +111,13 @@
 
         </div>
 
-        <p>If you erase all units in the board,</p>
-        <p>you'll get <span>+150 points</span>!</p>
+        <p>Erase all and get <span>+150 points</span>!</p>
         <h4>Bad Guys</h4>
         <p>When you reach level 2, do not touch any of these units.</p>
 
         <div id="scoring">
 
-          <div id="bad">
+          <div class="order-scoring">
             <figure>
               <img src="img/icons/bad-duplicate-pieces.svg" alt="">
             </figure>
@@ -105,46 +142,7 @@
       </article>
     </article>
 
-    <article id="init-game">
-      <figure id="logo">
-        <img src="img/logo.png" alt="Logo Dr.Yai Game" />
-      </figure>
 
-      <button id="start-game">start game</button>
-      <button id="rules">how to play</button>
-
-      <p>Just a game like Tetris, but easier.</p>
-      <p>Just a game like Dr. Mario, but simplier.</p>
-      <h4>Controls</h4>
-      <p>Left-key to go left, right-key to go
-        right and down-key to speed the piece down.</p>
-      </p>
-    </article>
-
-    <article id="my-canvas">
-
-      <figure id="logo">
-        <img src="img/logo.png" id="logo" alt="Logo Dr.Yai Game" />
-      </figure>
-
-      <div id="on-game">
-        <p id="level">level <span>1</span></p>
-        <p id="timer"><span id="mins">00</span>:<span id="secs">00</span></p>
-        <p id="score-live">Score: <span>0</span></p>
-      </div>
-
-      <canvas id="my-tetris"></canvas>
-
-      <div id="helpful">
-        <small>Made with &#9829; by Yai</small>
-        <div id="music-button">
-          <img src="img/icons/btn-pause.svg" id="pause-music" alt="pause-dr-yai">
-          <img src="img/icons/btn-play.svg" id="play-music" alt="play-dr-yai">
-          <img src="img/icons/btn-help.svg" id="help-me" alt="help-dr-yai">
-        </div>
-      </div>
-
-    </article>
   </section>
 
   <!-- JS files -->

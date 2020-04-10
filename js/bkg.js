@@ -25,12 +25,7 @@ class BoardBackground {
         this.ctx.strokeRect(x * this.unit, y * this.unit, this.unit, this.unit)
     }
     draw() {
-        for (let i = 0; i < this.columns; i++) {
-            for (let k = 0; k < this.rows; k++) {
-                this.drawUnit(i, k)
-            }
-        }
-
+        this.board.forEach((e, idx) => e.forEach((elm, i) => this.drawUnit(idx, i)))
     }
 
 }

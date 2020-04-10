@@ -37,18 +37,3 @@ class Pieces {
 
     }
 }
-
-
-
-
-
-
-
-/* colors:
-almost white: #F5F6F9
-light green: #A5E887
-dark green: #00CC76
-xlight blue: #E1EBF0
-light blue: #B4D2D7
-blue: #0B799D
-dark blue: #07485E */
