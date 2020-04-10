@@ -43,7 +43,6 @@ const doctorYai = {
     frameCounter: 0,
     interval: undefined,
     key: {
-        SPACE: 32,
         LEFT: 37,
         RIGHT: 39,
         DOWN: 40,
@@ -56,12 +55,6 @@ const doctorYai = {
     level: 1,
 
     init() {
-        audioMusic.addEventListener('ended', function () {
-            this.currentTime = 0;
-            this.play();
-        }, false);
-        playMusic.addEventListener('click', this.playMusic)
-        pauseMusic.addEventListener('click', this.pauseMusic)
         this.canvasDom = document.getElementById("my-tetris")
         this.ctx = this.canvasDom.getContext("2d")
         levelText.innerHTML = this.level
@@ -73,6 +66,11 @@ const doctorYai = {
     playMusic() {
         audioMusic.play()
         audioMusic.volume = 0.2
+        //To play music on loop
+        audioMusic.addEventListener('ended', function () {
+            this.currentTime = 0;
+            this.play();
+        })
     },
     pauseMusic() {
         audioMusic.pause()
@@ -89,13 +87,17 @@ const doctorYai = {
             this.frameCounter++
             this.timeLimit--
             this.timeLimit === 0 && this.gameOver()
+
             this.clearScreen()
             this.drawAll()
+
             this.movePiece(this.piece, this.piece.direction)
             this.checkSibling()
             this.goingDown()
-            this.moreLevel()
-            this.complications()
+
+            this.levelUp()
+            this.badGuys()
+
             this.checkGameOver()
         }, 1000 / this.fps)
 
@@ -109,18 +111,30 @@ const doctorYai = {
     },
 
     setEventlisteners() {
-        document.onkeydown = (e) => {
+        document.onkeydown = e => {
             e.keyCode === this.key.RIGHT ? (this.piece.direction = "right") : null
             e.keyCode === this.key.LEFT ? (this.piece.direction = "left") : null
             e.keyCode === this.key.DOWN ? this.movePiece(this.piece, "down") : null
         }
-        helpMe.onclick = () => {
-            rulesPop.style.display = 'flex'
-        }
+        helpMe.onclick = () => rulesPop.style.display = 'flex'
+        playMusic.onclick = () => this.playMusic()
+        pauseMusic.onclick = () => this.pauseMusic()
     },
 
     clearScreen() {
         this.ctx.clearRect(0, 0, this.size.w, this.size.h)
+    },
+
+    getBkg() {
+        this.boardDrawed = new BoardBackground(this.ctx)
+    },
+
+    getPiece() {
+        this.piece = new Pieces(this.ctx)
+    },
+
+    getBadPiece(color) {
+        this.badPieces.push(new Bad(this.ctx, color))
     },
 
     drawAll() {
@@ -130,41 +144,13 @@ const doctorYai = {
         this.badPieces.forEach(bad => bad.draw())
     },
 
-    //Métodos de puntuación y nivel
     setScore(points) {
         pointsMusic.play()
         this.score += points
         scorePoints.innerHTML = this.score
     },
 
-    moreLevel() {
-        if (this.level === 1 && this.score >= 300) {
-            this.levelUp(2, 4, 300)
-        }
-        if (this.level === 2 && this.score >= 700) {
-            this.levelUp(3, 5, 250)
-        }
-        if (this.level === 3 && this.score >= 1500) {
-            this.levelUp(4, 6, 300)
-        }
-        if (this.level === 4 && this.score >= 2500) {
-            this.levelUp(5, 7, 250)
-        }
-        if (this.level === 5 && this.score >= 4000) {
-            this.levelUp(6, 8, 250)
-        }
-        if (this.level === 6 && this.score >= 5500) {
-            this.levelUp(7, 8, 200)
-        }
-        if (this.level === 7 && this.score >= 7000) {
-            this.levelUp(8, 8, 200)
-        }
-        if (this.level === 8 && this.score >= 9000) {
-            this.youWin()
-        }
-    },
-
-    levelUp(level, fps, timer) {
+    levelPop(level, fps) {
         this.pauseMusic()
         levelMusic.play()
         levelMusic.volume = 0.5
@@ -182,8 +168,55 @@ const doctorYai = {
 
             this.blockedPieces = []
             this.badPieces = []
-            this.timeLimit = timer
+            this.timeLimit = 300
             this.fps = fps
+        }
+    },
+
+    levelUp() {
+        this.level === 1 && this.score >= 300 && this.levelPop(2, 4)
+        this.level === 2 && this.score >= 700 && this.levelPop(3, 5)
+        this.level === 3 && this.score >= 1000 && this.levelPop(4, 6)
+        this.level === 4 && this.score >= 1500 && this.levelPop(5, 7)
+        this.level === 5 && this.score >= 2100 && this.levelPop(6, 8)
+        this.level === 6 && this.score >= 3000 && this.levelPop(7, 8)
+        this.level === 7 && this.score >= 3500 && this.levelPop(8, 8)
+        this.level === 8 && this.score >= 4000 && this.youWin()
+    },
+
+    badGuys() {
+
+        if (this.level === 2) {
+            this.frameCounter % 50 === 0 && this.getBadPiece('red')
+        }
+        if (this.level === 3) {
+            this.frameCounter % 30 === 0 && this.getBadPiece('red')
+            this.frameCounter % 50 === 0 && this.getBadPiece('plum')
+        }
+        if (this.level === 4) {
+            this.frameCounter % 30 === 0 && this.getBadPiece('red')
+            this.frameCounter % 35 === 0 && this.getBadPiece('plum')
+            this.frameCounter % 40 === 0 && this.getBadPiece('black')
+        }
+        if (this.level === 5) {
+            this.frameCounter % 25 === 0 && this.getBadPiece('red')
+            this.frameCounter % 30 === 0 && this.getBadPiece('plum')
+            this.frameCounter % 35 === 0 && this.getBadPiece('black')
+        }
+        if (this.level === 6) {
+            this.frameCounter % 20 === 0 && this.getBadPiece('red')
+            this.frameCounter % 25 === 0 && this.getBadPiece('plum')
+            this.frameCounter % 30 === 0 && this.getBadPiece('black')
+        }
+        if (this.level === 7) {
+            this.frameCounter % 15 === 0 && this.getBadPiece('red')
+            this.frameCounter % 20 === 0 && this.getBadPiece('plum')
+            this.frameCounter % 25 === 0 && this.getBadPiece('black')
+        }
+        if (this.level === 8) {
+            this.frameCounter % 10 === 0 && this.getBadPiece('red')
+            this.frameCounter % 15 === 0 && this.getBadPiece('plum')
+            this.frameCounter % 20 === 0 && this.getBadPiece('black')
         }
     },
 
@@ -196,15 +229,14 @@ const doctorYai = {
         winWin.onclick = () => {
             document.location.reload()
         }
-
     },
 
-    //Metodos del game over
     gameOver() {
         gameOverMusic.play()
         gameOverMusic.volume = 0.5
         this.pauseMusic()
         clearInterval(this.interval)
+
         gameOver.style.display = "flex"
         gameOverScore.innerHTML = this.score
         levelGameOver.innerHTML = levelText.innerHTML
@@ -215,21 +247,7 @@ const doctorYai = {
     },
 
     checkGameOver() {
-        this.blockedPieces.some((pc) => pc.posY < 0) && this.gameOver()
-    },
-
-    //Metodos del tablero
-    getBkg() {
-        this.boardDrawed = new BoardBackground(this.ctx)
-    },
-
-    //Metodos de pieces
-    getPiece() {
-        this.piece = new Pieces(this.ctx)
-    },
-
-    getBad(color) {
-        this.badPieces.push(new Bad(this.ctx, color))
+        this.blockedPieces.some(pc => pc.posY < 0) && this.gameOver()
     },
 
     movePiece(piece, dir) {
@@ -241,9 +259,8 @@ const doctorYai = {
 
         switch (dir) {
             case "left":
-                //recupero su dirección down, porque deja de funcionar las normas de down
                 piece.direction = "down"
-                //Reviso si choca con otras piezas, y si choca, se apila
+
                 if (this.blockedPieces.some((pc) => pc.posX === piece.posX - 1 && pc.posY === piece.posY)) {
                     piece.posX = piece.posX
 
@@ -317,8 +334,10 @@ const doctorYai = {
     },
 
     checkSibling() {
+        //Check if last piece added to blocked pieces.
         let target = this.blockedPieces[this.blockedPieces.length - 1]
-        //Reviso las posiciones ocupadas alrededor de la última pieza bloqueada. Si coinciden en color, las elimino
+
+        //2 pieces in the same color
         this.blockedPieces.forEach((pc, index) => {
             const twoCollide = {
                 leftCol: target.posY === pc.posY && target.posX === pc.posX - 1,
@@ -334,7 +353,7 @@ const doctorYai = {
                 }
             }
 
-            //Eliminación a 3 piezas del mismo color
+            //3 pieces in the same color
             this.blockedPieces.forEach((pc2, index2) => {
 
                 const threeCollide = {
@@ -355,82 +374,33 @@ const doctorYai = {
                     }
                 }
 
-            }) //Segundo for each
+            })
 
-        }) //Primer for each
-    },
-
-    goingDown() {
-        //Busco primero aquellas piezas que están bloqueadas por el eje inferior. Esas no van a descender más.
-        let availablePieces = this.blockedPieces.filter(pc => pc.posY !== 13)
-        //Dentro de las piezas que si pueden descender, busco aquellas que tengan un espacio debajo.
-        availablePieces.forEach(pc => {
-            if (!this.blockedPieces.some(piece => piece.posY === pc.posY + 1 && piece.posX === pc.posX)) {
-                pc.posY++
-            }
         })
     },
 
+    //When siblings is run, it is necessary to check if there is and empty space below, and if it is, move vertically.
+    goingDown() {
+        //Look for the pieces that are in the limit. Those won't need to descend.
+        let availablePieces = this.blockedPieces.filter(pc => pc.posY !== 13)
+        //Look for the pieces with space belown them.
+        availablePieces.forEach(pc => !this.blockedPieces.some(piece => piece.posY === pc.posY + 1 && piece.posX === pc.posX) && pc.posY++)
+    },
+
     //timer
-    getMinutes() {
-        return Math.floor((this.timeLimit / this.fps) / 60)
-    },
-    getSeconds() {
-        return Math.floor((this.timeLimit / this.fps) - this.getMinutes() * 60)
-    },
-    // getMinutes = () => Math.floor((this.timeLimit / this.fps) / 60),
-    // getSeconds = () => Math.floor((this.timeLimit / this.fps) - this.getMinutes() * 60)
-
     twoDigitsNumber(num) {
-        const twoDigits = num.toString()
-
+        let twoDigits = num.toString()
         let sumDigits = ""
-
-        if (twoDigits.length === 1) {
-            sumDigits = "0" + twoDigits
-        } else {
-            sumDigits = twoDigits
-        }
-
+        twoDigits.length === 1 ? sumDigits = "0" + twoDigits : sumDigits = twoDigits
         return sumDigits
     },
+
     setTimer() {
-        timerSeconds.innerHTML = this.twoDigitsNumber(this.getSeconds())
-        timerMinutes.innerHTML = this.twoDigitsNumber(this.getMinutes())
+        let getMinutes = () => Math.floor((this.timeLimit / this.fps) / 60)
+        let getSeconds = () => Math.floor((this.timeLimit / this.fps) - getMinutes() * 60)
+
+        timerSeconds.innerHTML = this.twoDigitsNumber(getSeconds())
+        timerMinutes.innerHTML = this.twoDigitsNumber(getMinutes())
     },
 
-    complications() {
-        if (this.level === 2) {
-            this.frameCounter % 50 === 0 && this.getBad('red')
-        }
-        if (this.level === 3) {
-            this.frameCounter % 30 === 0 && this.getBad('red')
-            this.frameCounter % 50 === 0 && this.getBad('plum')
-        }
-        if (this.level === 4) {
-            this.frameCounter % 30 === 0 && this.getBad('red')
-            this.frameCounter % 35 === 0 && this.getBad('plum')
-            this.frameCounter % 40 === 0 && this.getBad('black')
-        }
-        if (this.level === 5) {
-            this.frameCounter % 25 === 0 && this.getBad('red')
-            this.frameCounter % 30 === 0 && this.getBad('plum')
-            this.frameCounter % 35 === 0 && this.getBad('black')
-        }
-        if (this.level === 6) {
-            this.frameCounter % 20 === 0 && this.getBad('red')
-            this.frameCounter % 25 === 0 && this.getBad('plum')
-            this.frameCounter % 30 === 0 && this.getBad('black')
-        }
-        if (this.level === 7) {
-            this.frameCounter % 15 === 0 && this.getBad('red')
-            this.frameCounter % 20 === 0 && this.getBad('plum')
-            this.frameCounter % 25 === 0 && this.getBad('black')
-        }
-        if (this.level === 8) {
-            this.frameCounter % 10 === 0 && this.getBad('red')
-            this.frameCounter % 15 === 0 && this.getBad('plum')
-            this.frameCounter % 20 === 0 && this.getBad('black')
-        }
-    },
 }
