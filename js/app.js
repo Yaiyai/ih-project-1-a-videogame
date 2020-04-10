@@ -72,6 +72,7 @@ const doctorYai = {
             this.play();
         })
     },
+
     pauseMusic() {
         audioMusic.pause()
     },
@@ -346,25 +347,53 @@ const doctorYai = {
 
             //3 pieces in the same color
             this.blockedPieces.forEach((pc2, index2) => {
+                if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX + 1 && target.posX === pc2.posX + 2) {
+                    if (target.color === pc.color && target.color === pc2.color) {
+                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                            this.blockedPieces.pop()
+                            this.blockedPieces.splice(index, 1)
+                            this.blockedPieces.splice(index2, 1)
+                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(200)
 
-                const threeCollide = {
-                    leftCol: target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX + 1 && target.posX === pc2.posX + 2,
-                    rightCol: target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX - 2,
-                    centerCol: target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX + 1,
-                    downCol: target.posX === pc.posX && target.posX === pc2.posX && target.posY === pc.posY - 1 && target.posY === pc2.posY - 2,
-                    upCol: target.posX === pc.posX && target.posX === pc2.posX && target.posY === pc.posY + 1 && target.posY === pc2.posY + 2,
-                    midCol: target.posX === pc.posX && target.posX === pc2.posX && target.posY === pc.posY + 1 && target.posY === pc2.posY - 1,
-                }
-
-                for (elm2 in threeCollide) {
-                    if (threeCollide[elm2] && target.color === pc.color && target.color === pc2.color && (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D')) {
-                        this.blockedPieces.pop()
-                        this.blockedPieces.splice(index, 1)
-                        this.blockedPieces.splice(index2, 1)
-                        this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
+                        }
                     }
                 }
 
+                if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX - 2) {
+                    if (target.color === pc.color && target.color === pc2.color) {
+                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                            this.blockedPieces.pop()
+                            this.blockedPieces.splice(index, 1)
+                            this.blockedPieces.splice(index2, 1)
+                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
+
+                        }
+                    }
+                }
+
+                if (target.posY === pc.posY && target.posY === pc2.posY && target.posX === pc.posX - 1 && target.posX === pc2.posX + 1) {
+                    if (target.color === pc.color && target.color === pc2.color) {
+                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                            this.blockedPieces.pop()
+                            this.blockedPieces.splice(index, 1)
+                            this.blockedPieces.splice(index2, 1)
+                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
+
+                        }
+                    }
+                }
+
+                if (target.posX === pc.posX && target.posX === pc2.posX && target.posY === pc.posY - 1 && target.posY === pc2.posY - 2) {
+                    if (target.color === pc.color && target.color === pc2.color) {
+                        if (pc.color === '#00CC76' || pc.color === '#B4D2D7' || pc.color === '#0B799D') {
+                            this.blockedPieces.pop()
+                            this.blockedPieces.splice(index, 1)
+                            this.blockedPieces.splice(index2, 1)
+                            this.blockedPieces.length === 0 ? this.setScore(200) : this.setScore(100)
+
+                        }
+                    }
+                }
             })
 
         })

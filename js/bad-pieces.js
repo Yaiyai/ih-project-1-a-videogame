@@ -9,13 +9,15 @@ class Bad {
 
     setY() {
         let y = Math.floor(Math.random() * 12)
-
-        if (y !== 0) {
-            return y
-        } else {
+        if (y > 10) {
+            return y = 10
+        } else if (y === 0 || y === 1) {
             return y = 2
+        } else {
+            return y
         }
     }
+
     drawUnit(x, y) {
         // Posicion x e y dentro del tablero
         this.ctx.fillStyle = 'white'
@@ -31,18 +33,3 @@ class Bad {
     }
 
 }
-
-
-
-
-
-
-
-/* colors:
-almost white: #F5F6F9
-light green: #A5E887
-dark green: #00CC76
-xlight blue: #E1EBF0
-light blue: #B4D2D7
-blue: #0B799D
-dark blue: #07485E */
